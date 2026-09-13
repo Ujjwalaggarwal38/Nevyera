@@ -134,7 +134,22 @@ pricing tier pushes up out of its row. That's intentional.
 **6. Green is a signal, never the room.**
 An all-green build was rejected outright. `--color-live` is for status only.
 
-**7. No fabricated social proof. Ever.**
+**7. The muted greys and gold are context-dependent.**
+`--color-taupe`, `--color-slate` and `--color-faint` are chosen for a light page
+and are re-declared inside every dark context in `globals.css` (`.hero`,
+`.section-ink`, `.site-footer`, `.marquee`, `.panel`, `.tier.featured`). Without
+that override they land at 1.8–3.3:1 on near-black and read as washed-out or
+"glassy" even though nothing is translucent. If you add a new dark surface, add
+it to that selector list.
+
+Likewise, `--color-gold` is legible on near-black and **illegible on cream**
+(2.06:1). Gold *text* on a light background must use `--color-gold-deep`.
+`--color-gold` stays for hairlines and rules, which are decorative.
+
+To check the whole page, run the contrast audit in DevTools — it should report
+zero. It caught 68 failing elements the first time it was run.
+
+**8. No fabricated social proof. Ever.**
 No testimonials, customer logos, or "trusted by N businesses" counts until they
 are real, with names and numbers a prospect could ring. The proof section says
 this out loud. For a brand whose entire argument is trustworthiness, an invented

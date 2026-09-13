@@ -5,6 +5,7 @@ import { Hero } from "@/components/sections/Hero";
 import { TheCount } from "@/components/sections/TheCount";
 import { Statement } from "@/components/sections/Statement";
 import { Solutions } from "@/components/sections/Solutions";
+import { SolutionProvider } from "@/components/sections/SolutionContext";
 import { Story } from "@/components/sections/Story";
 import { Editorial } from "@/components/sections/Editorial";
 import { Proof } from "@/components/sections/Proof";
@@ -28,8 +29,12 @@ export default function HomePage() {
       <Marquee items={servedBusinesses} />
       <TheCount />
       <Statement />
-      <Solutions />
-      <Story />
+      {/* Solutions and Story share a selection: pick Inventory above and the
+          timeline below becomes the procurement story, not the WhatsApp one. */}
+      <SolutionProvider>
+        <Solutions />
+        <Story />
+      </SolutionProvider>
       <Editorial />
       <Proof />
       <PricingPreview />

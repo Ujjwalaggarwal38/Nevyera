@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useSolution } from "@/components/sections/SolutionContext";
 import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
 import { CustomScope } from "@/components/demos/CustomScope";
@@ -16,7 +16,7 @@ import { products } from "@/content/products";
  * copy of the same widget — running it twice on one page looked like padding.
  */
 export function Solutions() {
-  const [active, setActive] = useState(products[0].slug);
+  const { active, setActive } = useSolution();
 
   return (
     <section id="solutions" className="section-ink section-solutions">

@@ -23,6 +23,11 @@
   --color-bone: #ebe3d6;     /* body text on dark */
   --color-cream: #f2ece2;    /* alternate light section */
   --color-gold: #c9a227;     /* antique. hairlines, rules, accents — NOT buttons */
+  /* Gold is legible on near-black and illegible on cream (2.06:1). Any gold
+     TEXT sitting on a light background must use this deeper bronze instead —
+     5.1:1 on cream. --color-gold stays for hairlines and rules, which are
+     decorative and not held to text contrast. */
+  --color-gold-deep: #7a5f10;
   --color-brass: #dcc18a;    /* gold, softened — for text emphasis on dark */
   --color-rust: #a8543f;     /* failure states only: unanswered, overdue */
   --color-live: #4bae7e;     /* status only. green is a signal, never the room */
@@ -123,6 +128,28 @@
 }
 
 @layer components {
+  /*═══ CONTEXT-AWARE GREYS ═══
+    The muted greys were chosen against a light page. On the near-black
+    sections the same values land at 1.8–3.3:1 — every small label, timestamp
+    and badge failed WCAG AA, which reads to a visitor as washed-out or
+    "glassy" even though nothing is translucent.
+
+    Overriding the tokens inside dark contexts fixes all 60+ of them at once
+    and keeps the three-step hierarchy intact:
+      taupe 7.9:1  →  slate 6.1:1  →  faint 4.7:1   (all pass AA) */
+  .hero,
+  .section-ink,
+  .site-footer,
+  .marquee,
+  .panel,
+  .tier.featured {
+    --color-taupe: #b0a79a;
+    --color-slate: #9b9285;
+    /* tuned against --color-char (#1E1A16), the lightest dark surface, not
+       against obsidian — panels are where this grey is used most */
+    --color-faint: #8d8478;
+  }
+
   /*── the container ──*/
   .wrap {
     max-width: 1240px;

@@ -4,51 +4,44 @@ import { useEffect, useRef, useState } from "react";
 import { CountUp } from "@/components/motion/CountUp";
 import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
+import { useSolution } from "@/components/sections/SolutionContext";
+import { products } from "@/content/products";
+import { stories } from "@/content/stories";
 
 /**
- * The same Saturday, told twice. This is the "after" to the count section's
- * "before" — one lead followed through three beats while a pinned panel keeps
- * pace on the right.
+ * A three-beat timeline for whichever solution is selected above.
  *
- * ⚠ Sharma Motors, Rohit, Priya and the times are illustrative.
+ * All three stories share a shape — three timestamps and one number — because
+ * elapsed time is the argument every time: minutes instead of hours for leads,
+ * minutes instead of days for procurement, weeks instead of quarters for a
+ * custom build.
+ *
+ * The switcher is repeated here rather than relying only on the tabs above:
+ * a visitor who scrolls straight past the Solutions section would otherwise
+ * never learn this section changes.
  */
-
-const BEATS = [
-  {
-    clock: "09:14",
-    title: "It lands somewhere real",
-    body: "Rohit's message reaches the business number and becomes a lead on its own — his name, his number, and what he asked. Nobody wrote anything down.",
-    marker: { label: "Rohit Kumar", detail: "Captured as a lead" },
-  },
-  {
-    clock: "09:15",
-    title: "Priya owns it",
-    body: "Assigned, with her name on it, visible to the team. It stops being everybody's problem and therefore nobody's.",
-    marker: { label: "Assigned to Priya", detail: "Owner set · team notified" },
-  },
-  {
-    clock: "09:22",
-    title: "It closes",
-    body: "She replies from the shared inbox and books the test drive for 11:40. The conversation is still readable next year.",
-    marker: { label: "Test drive booked", detail: "11:40 · lead closed" },
-  },
-] as const;
-
 export function Story() {
+  const { active, setActive } = useSolution();
+  const story = stories[active] ?? stories[products[0].slug];
+
   const [reached, setReached] = useState(-1);
   const beatRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+  // Re-observe on story change: the beats are different elements each time.
   useEffect(() => {
+    setReached(-1);
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setReached(BEATS.length - 1);
+      setReached(story.beats.length - 1);
       return;
     }
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
           const index = Number((entry.target as HTMLElement).dataset.beat);
-          if (entry.isIntersecting) setReached(index);
+          setReached((prev) => (index > prev ? index : prev));
         });
       },
       { threshold: 0.6 },
@@ -56,7 +49,7 @@ export function Story() {
 
     beatRefs.current.forEach((el) => el && observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [active, story.beats.length]);
 
   return (
     <section id="how" className="section-ink section-story">
@@ -64,19 +57,32 @@ export function Story() {
         <div className="head-split">
           <Reveal>
             <GoldRule className="mb-5" />
-            <h2>The same Saturday, eight minutes long.</h2>
+            <p className="t-mono story-eyebrow">{story.eyebrow}</p>
+            <h2>{story.heading}</h2>
           </Reveal>
+
           <Reveal>
-            <p className="t-body head-note">
-              Nothing clever happens here. The enquiry just has somewhere to land and a name
-              attached to it.
-            </p>
+            <p className="t-body head-note">{story.intro}</p>
+
+            <div className="story-switch" role="group" aria-label="Choose a solution">
+              {products.map((p) => (
+                <button
+                  key={p.slug}
+                  type="button"
+                  className={active === p.slug ? "selected" : ""}
+                  aria-pressed={active === p.slug}
+                  onClick={() => setActive(p.slug)}
+                >
+                  {p.name}
+                </button>
+              ))}
+            </div>
           </Reveal>
         </div>
 
-        <div className="beats">
+        <div className="beats" key={active}>
           <div>
-            {BEATS.map((beat, i) => (
+            {story.beats.map((beat, i) => (
               <div
                 key={beat.clock}
                 data-beat={i}
@@ -93,18 +99,16 @@ export function Story() {
 
             <Reveal className="payoff">
               <div className="payoff-number">
-                <CountUp to={8} />
+                <CountUp to={story.payoff.value} />
+                <span className="payoff-unit">{story.payoff.unit}</span>
               </div>
-              <p className="t-body payoff-note">
-                Minutes, start to finish. The version without software took four hours and
-                lost two of the three.
-              </p>
+              <p className="t-body payoff-note">{story.payoff.note}</p>
             </Reveal>
           </div>
 
           <div className="pinned">
             <div className="panel">
-              {BEATS.map((beat, i) => (
+              {story.beats.map((beat, i) => (
                 <div key={beat.clock} className={`marker ${reached >= i ? "on" : ""}`}>
                   <span className="marker-time">{beat.clock}</span>
                   <span className="marker-detail">
@@ -116,7 +120,7 @@ export function Story() {
               <div className="marker-bar">
                 <i
                   style={{
-                    width: `${((Math.max(reached, -1) + 1) / BEATS.length) * 100}%`,
+                    width: `${((Math.max(reached, -1) + 1) / story.beats.length) * 100}%`,
                   }}
                 />
               </div>
