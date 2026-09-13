@@ -523,3 +523,16 @@
     }
   }
 }
+
+@layer components {
+  .btn-outline {
+    border-color: var(--color-hair-l);
+    color: var(--color-obsidian);
+    background: transparent;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-gold);
+    color: var(--color-obsidian);
+  }
+}
