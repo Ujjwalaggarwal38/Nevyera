@@ -566,88 +566,107 @@
     margin-bottom: 2px;
   }
 
-  /*═══ THE COUNT ═══*/
+  /*═══ THE COUNT ═══
+    Rows carry this section, not a decorative numeral. The headline states the
+    count in words so nothing extra is needed to make the point. */
   .section-count {
-    padding-block: clamp(80px, 10vw, 140px);
+    padding-block: clamp(80px, 10vw, 136px);
   }
 
-  .count-grid {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: clamp(30px, 6vw, 88px);
-    align-items: start;
+  .count-head {
+    margin-bottom: clamp(38px, 5vw, 62px);
   }
 
-  .big-numeral {
-    font-family: var(--font-display);
-    font-size: clamp(120px, 21vw, 300px);
-    font-weight: 300;
-    line-height: 0.76;
-    letter-spacing: -0.06em;
-    margin-top: -0.06em;
+  .count-heading {
+    font-size: clamp(32px, 5vw, 64px);
+    margin-top: 16px;
+    max-width: 18ch;
   }
 
-  .big-numeral span {
-    color: var(--color-gold-deep);
-  }
-
-  .numeral-label {
-    margin-top: 6px;
-  }
-
-  .missed {
-    padding-top: 14px;
-  }
-
-  .missed-intro {
-    max-width: 46ch;
-    margin-bottom: 30px;
+  .missed-list {
+    border-top: 1px solid var(--color-hair-l);
   }
 
   .missed-row {
-    padding: 19px 0;
-    border-bottom: 1px solid var(--color-hair-l);
-    display: flex;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: minmax(170px, 0.9fr) minmax(0, 2fr) minmax(150px, auto);
+    gap: clamp(18px, 3vw, 46px);
     align-items: baseline;
-  }
-
-  .missed-row.fade-0 {
-    border-top: 1px solid var(--color-hair-l);
-  }
-  .missed-row.fade-1 {
-    opacity: 0.58;
-  }
-  .missed-row.fade-2 {
-    opacity: 0.34;
+    padding: clamp(20px, 2.4vw, 30px) 0;
+    border-bottom: 1px solid var(--color-hair-l);
   }
 
   .missed-who {
-    font-size: 14.5px;
-    font-weight: 500;
-    min-width: 132px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 
-  .missed-question {
-    flex: 1;
-    font-family: var(--font-display);
-    font-style: italic;
-    font-size: 15px;
-    color: var(--color-slate);
-  }
-
-  .missed-when {
+  /* the domain label is what maps each row to a solution below */
+  .missed-domain {
     font-family: var(--font-mono);
     font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-gold-deep);
+  }
+
+  .missed-at {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    color: var(--color-slate);
+    font-weight: 400;
+  }
+
+  .missed-what {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(17px, 1.9vw, 23px);
+    line-height: 1.35;
+    color: var(--color-obsidian);
+  }
+
+  /* only an actual customer message is set in italics */
+  .missed-what.is-quote {
+    font-style: italic;
+  }
+
+  .missed-outcome {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
     color: var(--color-rust);
-    letter-spacing: 0.06em;
+    text-align: right;
     white-space: nowrap;
   }
 
-  .missed-outro {
-    margin-top: 26px;
-    max-width: 44ch;
-    font-size: 14px;
+  /* one step further from answered at each row — the point is made by the
+     fade, so nothing louder is needed */
+  .state-late .missed-what,
+  .state-lost .missed-what {
+    color: var(--color-slate);
+  }
+
+  .state-lost .missed-outcome {
+    background: var(--color-rust);
+    color: var(--color-ivory);
+    padding: 4px 9px;
+    border-radius: 2px;
+  }
+
+  .count-close {
+    margin-top: clamp(30px, 4vw, 46px);
+    font-size: clamp(16px, 1.7vw, 19px);
+    line-height: 1.7;
+    max-width: 52ch;
+    color: var(--color-slate);
+  }
+
+  .count-close b {
+    color: var(--color-obsidian);
+    font-weight: 500;
   }
 
   /*═══ STATEMENT ═══*/
@@ -1272,7 +1291,6 @@
   /*═══ RESPONSIVE ═══*/
   @media (max-width: 1000px) {
     .hero-grid,
-    .count-grid,
     .head-split,
     .pane,
     .demo-duo,
@@ -1298,8 +1316,21 @@
       padding-block: 26px;
     }
 
-    .big-numeral {
-      font-size: clamp(90px, 26vw, 150px);
+    /* rows become stacked blocks, outcome on its own line */
+    .missed-row {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .missed-who {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .missed-outcome {
+      text-align: left;
+      justify-self: start;
     }
 
     .editorial-columns {
@@ -1323,11 +1354,6 @@
     .tier.featured {
       margin-top: 0;
       padding-block: clamp(26px, 3.2vw, 42px);
-    }
-
-    .missed-row {
-      flex-direction: column;
-      gap: 5px;
     }
 
     .tab {
