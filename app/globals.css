@@ -1,0 +1,448 @@
+@import "tailwindcss";
+@import "./sections.css";
+
+/*═══════════════════════════════════════════════════════════
+  NEVYERA DESIGN SYSTEM
+  Reference build: demo/v5.html — where this and v5 disagree,
+  v5 wins. Spec: docs/superpowers/specs/2026-09-13-…-design.md
+
+  Three rules that were each earned by a rejected iteration:
+    1. No glassmorphism. Every surface is solid + 1px border.
+       There is no backdrop-filter anywhere in this codebase.
+    2. Gold never fills a button. Hairlines and accents only.
+    3. ONE easing curve and ONE travel distance. Adding motion
+       is fine; adding a second --ease-* or --travel is not.
+═══════════════════════════════════════════════════════════*/
+
+@theme {
+  /*── colour ──*/
+  --color-obsidian: #14110e; /* primary canvas — warm, brown-leaning, never cold grey */
+  --color-char: #1e1a16;     /* raised surfaces: every panel */
+  --color-raise: #262119;    /* one step above char */
+  --color-ivory: #f7f3ec;    /* light canvas AND primary button fill */
+  --color-bone: #ebe3d6;     /* body text on dark */
+  --color-cream: #f2ece2;    /* alternate light section */
+  --color-gold: #c9a227;     /* antique. hairlines, rules, accents — NOT buttons */
+  --color-brass: #dcc18a;    /* gold, softened — for text emphasis on dark */
+  --color-rust: #a8543f;     /* failure states only: unanswered, overdue */
+  --color-live: #4bae7e;     /* status only. green is a signal, never the room */
+  --color-taupe: #9a9186;
+  --color-slate: #6e665c;
+  --color-faint: #4a443c;
+  --color-hair-d: #2e2820;   /* hairline on dark */
+  --color-hair-l: #e2d9ca;   /* hairline on light */
+
+  /*── type ──*/
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  /*── motion: the whole language ──*/
+  --ease-brand: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --travel: 26px;
+  --dur-slow: 900ms;
+  --dur-mid: 520ms;
+  --dur-fast: 260ms;
+
+  /*── layout ──*/
+  --spacing-gut: clamp(22px, 6vw, 80px);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-ivory);
+    color: var(--color-obsidian);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Fraunces is used at weight 300 and never bold. The quirk axes stay off —
+     WONK on makes it charming, which is not what this brand is. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: -0.026em;
+    line-height: 1.02;
+    margin: 0;
+    font-variation-settings: "SOFT" 0, "WONK" 0;
+  }
+
+  h3 {
+    font-size: clamp(18px, 1.65vw, 22px);
+    font-weight: 400;
+    letter-spacing: -0.018em;
+    line-height: 1.2;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  em {
+    font-style: italic;
+    color: var(--color-brass);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-obsidian);
+  }
+
+  :focus-visible {
+    outline: 1.5px solid var(--color-gold);
+    outline-offset: 4px;
+  }
+
+  /* Nothing on this site animates for someone who asked it not to. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}
+
+@layer components {
+  /*── the container ──*/
+  .wrap {
+    max-width: 1240px;
+    margin-inline: auto;
+    padding-inline: var(--spacing-gut);
+  }
+
+  /*── small caps label, used as section eyebrows ──*/
+  .t-mono {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+  }
+
+  .t-body {
+    font-size: 16px;
+    line-height: 1.78;
+    color: var(--color-slate);
+  }
+
+  /*── buttons: ivory on dark, obsidian on light, gold wipe on hover.
+       The wipe is why these read as eye-catching without a loud fill. ──*/
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 16px 32px;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      color var(--dur-fast) var(--ease-brand),
+      border-color var(--dur-fast) var(--ease-brand),
+      transform var(--dur-fast) var(--ease-brand);
+  }
+
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--color-gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 420ms var(--ease-brand);
+  }
+
+  .btn:hover::before {
+    transform: scaleX(1);
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary {
+    background: var(--color-ivory);
+    color: var(--color-obsidian);
+  }
+
+  .btn-ghost {
+    border-color: var(--color-hair-d);
+    color: var(--color-bone);
+    background: transparent;
+  }
+
+  .btn-ghost:hover {
+    color: var(--color-obsidian);
+    border-color: var(--color-gold);
+  }
+
+  /* on light sections the polarity flips */
+  .on-light .btn-primary {
+    background: var(--color-obsidian);
+    color: var(--color-ivory);
+  }
+
+  .on-light .btn-ghost {
+    border-color: var(--color-hair-l);
+    color: var(--color-obsidian);
+  }
+
+  /*── THE solid surface. No blur, no transparency, ever. ──*/
+  .panel {
+    background: var(--color-char);
+    border: 1px solid var(--color-hair-d);
+    border-radius: 3px;
+    padding: 22px;
+  }
+
+  /*═══ MOTION ═══
+    Every entrance on this site is this one transition. If something needs
+    to animate differently, it is almost always the design that is wrong. */
+  .rv {
+    opacity: 0;
+    transform: translateY(var(--travel));
+    transition:
+      opacity var(--dur-slow) var(--ease-brand),
+      transform var(--dur-slow) var(--ease-brand);
+  }
+
+  .rv.in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /*── the signature: a gold hairline that draws itself at every section head ──*/
+  .gold-rule {
+    height: 1px;
+    width: 0;
+    background: var(--color-gold);
+    transition: width 1100ms var(--ease-brand);
+  }
+
+  .gold-rule.in {
+    width: 84px;
+  }
+
+  /*── the horizontal band that breaks the vertical stack ──*/
+  .marquee {
+    border-block: 1px solid var(--color-hair-d);
+    background: var(--color-obsidian);
+    overflow: hidden;
+    padding-block: 22px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 56px;
+    width: max-content;
+    animation-name: marquee-slide;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  .marquee-track span {
+    font-family: var(--font-display);
+    font-size: clamp(19px, 2.2vw, 28px);
+    font-weight: 300;
+    color: var(--color-faint);
+    white-space: nowrap;
+  }
+
+  .marquee-track i {
+    font-style: normal;
+    color: var(--color-gold);
+    margin-right: 56px;
+  }
+
+  @keyframes marquee-slide {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /*═══ NAV ═══*/
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 23px;
+    letter-spacing: -0.03em;
+    color: var(--color-ivory);
+    line-height: 1;
+  }
+
+  .wordmark span {
+    color: var(--color-gold);
+  }
+
+  .site-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 90;
+    border-bottom: 1px solid transparent;
+    transition:
+      background var(--dur-mid) var(--ease-brand),
+      border-color var(--dur-mid) var(--ease-brand);
+  }
+
+  .site-nav.stuck {
+    background: var(--color-obsidian);
+    border-bottom-color: var(--color-hair-d);
+  }
+
+  .site-nav .wrap {
+    display: flex;
+    align-items: center;
+    gap: 36px;
+    height: 78px;
+  }
+
+  .site-nav .wordmark {
+    margin-right: auto;
+  }
+
+  .site-nav ul {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 13.5px;
+    color: var(--color-taupe);
+  }
+
+  .site-nav ul a {
+    position: relative;
+    transition: color var(--dur-fast) var(--ease-brand);
+  }
+
+  .site-nav ul a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    height: 1px;
+    width: 0;
+    background: var(--color-gold);
+    transition: width var(--dur-mid) var(--ease-brand);
+  }
+
+  .site-nav ul a:hover {
+    color: var(--color-ivory);
+  }
+
+  .site-nav ul a:hover::after {
+    width: 100%;
+  }
+
+  /*═══ FOOTER ═══*/
+  .site-footer {
+    background: var(--color-obsidian);
+    color: var(--color-slate);
+    padding-block: 68px 32px;
+    font-size: 13.5px;
+    border-top: 1px solid var(--color-hair-d);
+  }
+
+  .footer-cols {
+    display: grid;
+    grid-template-columns: 1.7fr repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .footer-wordmark {
+    font-size: 26px;
+  }
+
+  .footer-tagline {
+    margin-top: 16px;
+    max-width: 26ch;
+    line-height: 1.7;
+  }
+
+  .site-footer h4 {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+    margin: 0 0 18px;
+    font-weight: 400;
+  }
+
+  .site-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .site-footer li {
+    margin-bottom: 11px;
+  }
+
+  .site-footer a {
+    transition: color var(--dur-fast) var(--ease-brand);
+  }
+
+  .site-footer a:hover {
+    color: var(--color-brass);
+  }
+
+  .footer-base {
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-hair-d);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--color-faint);
+  }
+
+  @media (max-width: 1000px) {
+    .site-nav ul {
+      display: none;
+    }
+    .footer-cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .footer-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+}

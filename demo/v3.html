@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nevyera — Software your business runs on</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/*═══════════════════ SYSTEM ═══════════════════
+  ONE curve, ONE travel distance, ONE signature.
+  --ease is the only easing on this page.        */
+:root{
+  --obsidian:#14110E;   /* warm near-black, brown-leaning */
+  --char:#1E1A16;       /* raised surface */
+  --ivory:#F7F3EC;
+  --bone:#EBE3D6;
+  --gold:#C9A227;       /* antique, not amber */
+  --brass:#DCC18A;
+  --taupe:#9A9186;
+  --slate:#6E665C;
+  --hair:rgba(201,162,39,.22);
+  --hairw:rgba(20,17,14,.12);
+  --live:#4BAE7E;
+
+  --display:'Fraunces',Georgia,serif;
+  --body:'Inter',system-ui,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --travel:24px;
+  --slow:900ms; --mid:520ms; --fast:280ms;
+
+  --gut:clamp(22px,6vw,80px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ivory);color:var(--obsidian);font-family:var(--body);
+  font-size:16px;font-weight:400;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:-.022em;line-height:1.05;margin:0;
+  font-variation-settings:'SOFT' 0,'WONK' 0}
+h1{font-size:clamp(38px,6.2vw,82px);font-weight:300}
+h2{font-size:clamp(30px,4.4vw,54px);font-weight:300}
+h3{font-size:clamp(19px,1.7vw,23px);font-weight:400;letter-spacing:-.018em}
+p{margin:0}
+em{font-style:italic;color:var(--brass)}
+a{color:inherit;text-decoration:none}
+button,input,select{font-family:inherit}
+::selection{background:var(--gold);color:var(--obsidian)}
+:focus-visible{outline:1.5px solid var(--gold);outline-offset:4px}
+
+.wrap{max-width:1200px;margin:0 auto;padding-inline:var(--gut)}
+.sec{padding-block:clamp(84px,11vw,168px);position:relative}
+.ink{background:var(--obsidian);color:var(--bone)}
+.ink h1,.ink h2,.ink h3{color:var(--ivory)}
+
+/*──── SIGNATURE: the drawn hairline ────*/
+.eyebrow{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--slate);margin-bottom:26px;padding-top:18px;position:relative}
+.eyebrow::before{content:"";position:absolute;top:0;left:0;height:1px;width:0;background:var(--gold);
+  transition:width 1100ms var(--ease)}
+.in .eyebrow::before,.eyebrow.in::before{width:82px}
+.ink .eyebrow{color:var(--taupe)}
+
+.lede{font-size:clamp(15.5px,1.55vw,18px);line-height:1.75;color:var(--slate);max-width:50ch;
+  margin-top:22px;font-weight:400}
+.ink .lede{color:var(--taupe)}
+
+/*──── buttons ────*/
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-size:13.5px;
+  font-weight:500;letter-spacing:.02em;padding:15px 30px;border:1px solid transparent;cursor:pointer;
+  border-radius:2px;transition:background var(--fast) var(--ease),color var(--fast) var(--ease),
+  border-color var(--fast) var(--ease),transform var(--fast) var(--ease)}
+.btn:hover{transform:translateY(-1px)}
+.btn-g{background:var(--gold);color:var(--obsidian)}
+.btn-g:hover{background:var(--brass)}
+.btn-o{border-color:var(--hairw);color:var(--obsidian);background:transparent}
+.btn-o:hover{border-color:var(--gold)}
+.ink .btn-o{border-color:rgba(235,227,214,.18);color:var(--bone)}
+.ink .btn-o:hover{border-color:var(--gold);color:var(--ivory)}
+
+/*──── NAV ────*/
+.nav{position:fixed;top:0;left:0;right:0;z-index:80;
+  transition:background var(--mid) var(--ease),border-color var(--mid) var(--ease);
+  border-bottom:1px solid transparent}
+.nav.stuck{background:rgba(20,17,14,.92);backdrop-filter:blur(10px);border-bottom-color:rgba(201,162,39,.15)}
+.nav .wrap{display:flex;align-items:center;gap:36px;height:82px}
+.mark{font-family:var(--display);font-weight:500;font-size:22px;letter-spacing:-.03em;
+  color:var(--ivory);line-height:1;margin-right:auto}
+.mark span{color:var(--gold)}
+.nav ul{display:flex;gap:34px;list-style:none;margin:0;padding:0;font-size:13.5px;color:var(--taupe)}
+.nav ul a{position:relative;transition:color var(--fast) var(--ease)}
+.nav ul a::after{content:"";position:absolute;left:0;bottom:-6px;height:1px;width:0;
+  background:var(--gold);transition:width var(--mid) var(--ease)}
+.nav ul a:hover{color:var(--ivory)}
+.nav ul a:hover::after{width:100%}
+
+/*──── HERO ────*/
+.hero{background:var(--obsidian);color:var(--bone);position:relative;overflow:hidden;
+  padding-block:clamp(130px,16vw,190px) clamp(70px,9vw,120px)}
+.glow{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(58% 42% at 22% 6%,rgba(201,162,39,.13),transparent 68%),
+             radial-gradient(46% 40% at 88% 82%,rgba(75,174,126,.07),transparent 66%)}
+.vign{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(110% 80% at 50% 30%,transparent 40%,rgba(0,0,0,.42))}
+.hero .wrap{position:relative;z-index:2}
+.hero h1{max-width:15ch}
+.hero .lede{max-width:46ch}
+.hcta{display:flex;gap:14px;margin-top:42px;flex-wrap:wrap;align-items:center}
+.fine{font-size:12.5px;color:var(--slate);margin-top:22px;letter-spacing:.01em}
+.fine b{color:var(--brass);font-weight:500}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,80px);align-items:center}
+
+/*──── PLAYGROUND ────*/
+.play{border:1px solid rgba(201,162,39,.2);background:var(--char);padding:clamp(18px,2vw,26px);
+  border-radius:3px;position:relative}
+.play::before{content:"";position:absolute;top:-1px;left:0;height:1px;width:0;background:var(--gold);
+  transition:width 1400ms var(--ease) 200ms}
+.play.in::before{width:100%}
+.ptitle{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--taupe);margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.ptitle b{color:var(--gold);font-weight:400}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.col{display:flex;flex-direction:column;min-width:0}
+.ctag{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--slate);padding-bottom:11px;margin-bottom:14px;border-bottom:1px solid rgba(235,227,214,.09)}
+.thread{display:flex;flex-direction:column;gap:9px;min-height:168px;max-height:200px;
+  overflow-y:auto;padding-right:5px}
+.cb{max-width:90%;font-size:13px;line-height:1.55;padding:10px 14px;align-self:flex-end;
+  background:rgba(201,162,39,.13);color:var(--ivory);border-radius:3px;
+  animation:rise var(--mid) var(--ease) both}
+.cb.in{align-self:flex-start;background:rgba(235,227,214,.06);color:var(--bone)}
+@keyframes rise{from{opacity:0;transform:translateY(var(--travel))}to{opacity:1;transform:none}}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 12px}
+.chip{font-size:11.5px;padding:7px 13px;border:1px solid rgba(235,227,214,.13);background:transparent;
+  color:var(--taupe);cursor:pointer;border-radius:2px;
+  transition:border-color var(--fast) var(--ease),color var(--fast) var(--ease)}
+.chip:hover{border-color:var(--gold);color:var(--brass)}
+.composer{display:flex;gap:9px;margin-top:auto}
+.composer input{flex:1;min-width:0;background:rgba(235,227,214,.05);border:1px solid rgba(235,227,214,.13);
+  color:var(--ivory);padding:13px 15px;font-size:13.5px;border-radius:2px;
+  transition:border-color var(--fast) var(--ease)}
+.composer input::placeholder{color:#5E574E}
+.composer input:focus{outline:none;border-color:var(--gold)}
+.send{width:46px;border:1px solid var(--gold);background:var(--gold);color:var(--obsidian);
+  cursor:pointer;display:grid;place-items:center;border-radius:2px;flex:none;
+  transition:background var(--fast) var(--ease)}
+.send:hover{background:var(--brass)}
+.send svg{width:16px;height:16px;fill:currentColor}
+.leads{display:flex;flex-direction:column;gap:10px;min-height:232px;max-height:274px;
+  overflow-y:auto;padding-right:5px}
+.lead{border:1px solid rgba(235,227,214,.1);padding:14px;border-radius:2px;position:relative;
+  animation:rise var(--mid) var(--ease) both;background:rgba(235,227,214,.02)}
+.lead::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--gold);
+  transform:scaleY(0);transform-origin:top;animation:draw 700ms var(--ease) forwards}
+@keyframes draw{to{transform:scaleY(1)}}
+.lrow{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}
+.lnm{font-size:13px;color:var(--ivory);font-weight:500}
+.ltm{font-family:var(--mono);font-size:9.5px;color:var(--slate)}
+.pill{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;
+  transition:color var(--mid) var(--ease)}
+.p-new{color:var(--gold)}.p-asg{color:var(--live)}.p-cls{color:var(--slate)}
+.lmsg{font-size:12.5px;color:var(--taupe);line-height:1.55}
+.lfoot{font-size:11.5px;color:var(--slate);margin-top:10px;padding-top:10px;
+  border-top:1px solid rgba(235,227,214,.07);opacity:0;max-height:0;overflow:hidden;
+  transition:opacity var(--mid) var(--ease),max-height var(--mid) var(--ease)}
+.lfoot.show{opacity:1;max-height:44px}
+.empty{color:#5E574E;font-size:12.5px;text-align:center;padding:64px 14px;line-height:1.8}
+.empty b{display:block;color:var(--taupe);margin-bottom:6px;font-family:var(--display);
+  font-size:16px;font-weight:400}
+.counter{font-family:var(--display);font-size:22px;font-weight:400;color:var(--ivory);
+  font-variant-numeric:tabular-nums}
+
+/*──── EDITORIAL ROWS ────*/
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,6vw,96px);align-items:center}
+.stat-hero{font-family:var(--display);font-size:clamp(64px,11vw,150px);font-weight:300;
+  color:var(--gold);line-height:.86;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.stat-sub{font-size:15px;color:var(--slate);max-width:34ch;margin-top:20px}
+.ink .stat-sub{color:var(--taupe)}
+.missed{display:flex;flex-direction:column}
+.miss{padding:20px 0;border-bottom:1px solid var(--hairw);display:flex;gap:18px;align-items:baseline}
+.miss:first-child{border-top:1px solid var(--hairw)}
+.miss .who{font-size:14px;font-weight:500;min-width:126px}
+.miss .q{font-size:13.5px;color:var(--slate);flex:1}
+.miss .when{font-family:var(--mono);font-size:10.5px;color:#A8543F;letter-spacing:.06em;white-space:nowrap}
+.miss.f2{opacity:.62}.miss.f3{opacity:.38}
+
+/*──── PRODUCTS ────*/
+.prods{margin-top:64px;border-top:1px solid var(--hairw)}
+.prod{display:grid;grid-template-columns:auto 1fr auto;gap:clamp(22px,4vw,60px);
+  padding:clamp(30px,4vw,50px) 0;border-bottom:1px solid var(--hairw);align-items:start;
+  position:relative;transition:background var(--mid) var(--ease)}
+.prod:hover{background:rgba(201,162,39,.035)}
+.prod .idx{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--gold);padding-top:7px}
+.prod h3{margin-bottom:12px}
+.prod .badge{font-family:var(--mono);font-size:9px;letter-spacing:.16em;color:var(--live);
+  border:1px solid rgba(75,174,126,.35);padding:3px 8px;margin-left:12px;vertical-align:3px;border-radius:2px}
+.prod p{font-size:14.5px;color:var(--slate);max-width:52ch}
+.prod .feats{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:18px;font-size:12.5px;color:var(--slate)}
+.prod .feats span{position:relative;padding-left:15px}
+.prod .feats span::before{content:"";position:absolute;left:0;top:8px;width:5px;height:1px;background:var(--gold)}
+.prod .arrow{font-size:20px;color:var(--gold);padding-top:4px;opacity:0;transform:translateX(-8px);
+  transition:opacity var(--mid) var(--ease),transform var(--mid) var(--ease)}
+.prod:hover .arrow{opacity:1;transform:none}
+
+/*──── STORY ────*/
+.beats{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,6vw,90px);align-items:start;margin-top:56px}
+.beat{padding-block:clamp(46px,8vh,92px);opacity:.26;transition:opacity var(--slow) var(--ease)}
+.beat.on{opacity:1}
+.beat .clk{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;color:var(--gold);margin-bottom:14px}
+.beat p{font-size:14.5px;color:var(--taupe);line-height:1.75;max-width:42ch;margin-top:12px}
+.pinned{position:sticky;top:140px}
+.vz{border:1px solid rgba(201,162,39,.2);background:var(--char);padding:26px}
+.vzr{display:flex;gap:14px;align-items:baseline;padding:17px 0;border-bottom:1px solid rgba(235,227,214,.08);
+  opacity:.26;transition:opacity var(--slow) var(--ease)}
+.vzr:last-of-type{border-bottom:none}
+.vzr.on{opacity:1}
+.vzr .t{font-family:var(--mono);font-size:10.5px;color:var(--gold);letter-spacing:.12em;min-width:62px}
+.vzr .d b{display:block;font-size:13.5px;color:var(--ivory);font-weight:500}
+.vzr .d span{font-size:12.5px;color:var(--slate)}
+.vzbar{height:1px;background:rgba(235,227,214,.1);margin-top:22px;position:relative}
+.vzbar i{position:absolute;left:0;top:0;height:1px;background:var(--gold);width:0;
+  transition:width var(--slow) var(--ease)}
+
+/*──── PROOF ────*/
+.proof{display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:56px;
+  border-top:1px solid var(--hairw);border-left:1px solid var(--hairw)}
+.pf{padding:clamp(26px,3.4vw,44px);border-right:1px solid var(--hairw);border-bottom:1px solid var(--hairw)}
+.pf h3{margin-bottom:11px}
+.pf p{font-size:14px;color:var(--slate);line-height:1.72}
+.pf .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:16px}
+.note{margin-top:44px;padding-left:28px;border-left:1px solid var(--gold);font-size:14px;
+  color:var(--slate);max-width:64ch;line-height:1.75}
+.note b{color:var(--obsidian);font-weight:500}
+
+/*──── PRICING ────*/
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:56px;border-top:1px solid var(--hairw)}
+.tier{padding:clamp(28px,3.4vw,44px) clamp(22px,2.6vw,34px);border-bottom:1px solid var(--hairw);
+  border-right:1px solid var(--hairw);transition:background var(--mid) var(--ease)}
+.tier:first-child{border-left:1px solid var(--hairw)}
+.tier:hover{background:rgba(201,162,39,.04)}
+.tier.mid{background:var(--obsidian);color:var(--bone);border-color:var(--obsidian)}
+.tier.mid .nm{color:var(--brass)}.tier.mid .pr{color:var(--ivory)}
+.tier.mid li{color:var(--taupe)}.tier.mid .per{color:var(--slate)}
+.tier .nm{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--slate)}
+.tier .pr{font-family:var(--display);font-size:clamp(36px,4.2vw,50px);font-weight:300;margin:16px 0 3px;
+  letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.tier .per{font-size:12.5px;color:var(--slate);margin-bottom:26px}
+.tier ul{list-style:none;padding:0;margin:0 0 30px;font-size:13.5px;color:var(--slate)}
+.tier li{padding:9px 0;border-top:1px solid var(--hairw)}
+.tier.mid li{border-top-color:rgba(235,227,214,.1)}
+.tier .btn{width:100%}
+.cfg{margin-top:26px;font-family:var(--mono);font-size:11px;color:var(--slate);letter-spacing:.04em}
+
+/*──── CTA ────*/
+.ctabox{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,6vw,90px);align-items:start}
+.field{margin-bottom:2px;border-bottom:1px solid rgba(235,227,214,.13);padding:14px 0;
+  transition:border-color var(--fast) var(--ease)}
+.field:focus-within{border-bottom-color:var(--gold)}
+.field label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--slate);margin-bottom:8px}
+.field input,.field select{width:100%;background:transparent;border:none;color:var(--ivory);
+  font-size:15px;padding:0;outline:none}
+.field input::placeholder{color:#5E574E}
+.field select option{background:var(--char)}
+.why{list-style:none;padding:0;margin:32px 0 0}
+.why li{padding:14px 0;border-top:1px solid rgba(235,227,214,.1);font-size:14px;color:var(--taupe)}
+
+/*──── FOOTER ────*/
+footer{background:var(--obsidian);color:var(--slate);padding-block:72px 34px;font-size:13.5px;
+  border-top:1px solid rgba(201,162,39,.15)}
+footer .cols{display:grid;grid-template-columns:1.7fr repeat(3,1fr);gap:40px}
+footer .mark{font-size:26px;margin:0}
+footer h4{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:#5E574E;margin:0 0 18px;font-weight:400}
+footer ul{list-style:none;padding:0;margin:0}
+footer li{margin-bottom:11px}
+footer a{transition:color var(--fast) var(--ease)}
+footer a:hover{color:var(--brass)}
+footer .base{margin-top:56px;padding-top:26px;border-top:1px solid rgba(235,227,214,.08);
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:#5E574E}
+
+/*──── THE ONE REVEAL ────*/
+.rv{opacity:0;transform:translateY(var(--travel));
+  transition:opacity var(--slow) var(--ease),transform var(--slow) var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+@media(max-width:980px){
+  .hero-grid,.split,.row2,.beats,.ctabox,.proof,.tiers{grid-template-columns:1fr}
+  .pinned{position:static}
+  .beat{opacity:1;padding-block:30px}
+  .nav ul{display:none}
+  .prod{grid-template-columns:1fr;gap:14px}
+  .prod .idx{padding-top:0}.prod .arrow{display:none}
+  .proof{border-left:none}.pf{border-right:none}
+  .tier{border-left:1px solid var(--hairw)}
+  .miss{flex-direction:column;gap:6px}
+  footer .cols{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){footer .cols{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}.beat,.vzr{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="mark">Nevyera<span>.</span></a>
+    <ul>
+      <li><a href="#products">Products</a></li><li><a href="#how">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li><li><a href="#about">About</a></li>
+    </ul>
+    <a href="#demo" class="btn btn-g">Book a demo</a>
+  </div>
+</nav>
+
+<!--══════ HERO ══════-->
+<header class="hero" id="top">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="vign" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="rv">
+        <span class="eyebrow">Nevyera · Lead management &amp; inventory</span>
+        <h1>Nothing should depend on someone <em>remembering.</em></h1>
+        <p class="lede">Enquiries arrive, get owned by a named person, and close — on the software your
+          business already runs on. Try it on the right before you give us anything.</p>
+        <div class="hcta">
+          <a href="#demo" class="btn btn-g">Book a demo</a>
+          <a href="#how" class="btn btn-o">See how it works</a>
+        </div>
+        <p class="fine">14 days free · <b>No card</b> · Set up in an afternoon</p>
+      </div>
+
+      <!-- PLAYGROUND -->
+      <div class="play rv" id="play">
+        <div class="ptitle"><span>Live demonstration</span><b>Type anything →</b></div>
+        <div class="split">
+          <div class="col">
+            <div class="ctag">You · the customer</div>
+            <div class="thread" id="thread"></div>
+            <div class="chips" id="chips">
+              <button class="chip">Is the Creta 2022 available?</button>
+              <button class="chip">Down payment on the i20?</button>
+            </div>
+            <form class="composer" id="composer">
+              <input id="msg" placeholder="Write a message…" autocomplete="off" aria-label="Message the dealership">
+              <button class="send" type="submit" aria-label="Send">
+                <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+              </button>
+            </form>
+          </div>
+          <div class="col">
+            <div class="ctag" style="display:flex;justify-content:space-between;align-items:baseline">
+              <span>Sharma Motors · Nevyera</span><span class="counter" id="count">126</span>
+            </div>
+            <div class="leads" id="leads">
+              <div class="empty" id="empty"><b>Nothing here yet</b>Send a message and watch it become a lead.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!--══════ PROBLEM ══════-->
+<section class="sec">
+  <div class="wrap">
+    <div class="row2">
+      <div class="rv">
+        <span class="eyebrow">Saturday, 9:14 AM</span>
+        <h2>Three people asked to buy something.</h2>
+        <p class="lede">They messaged the number on your board. It went to someone's personal WhatsApp,
+          read between customers, answered when there was a gap. By Monday nobody could say which ones
+          were lost — because nothing recorded that they existed.</p>
+      </div>
+      <div class="missed rv">
+        <div class="miss"><span class="who">Rohit Kumar</span>
+          <span class="q">Is the Creta 2022 still available?</span><span class="when">4 HOURS</span></div>
+        <div class="miss f2"><span class="who">Anjali Sharma</span>
+          <span class="q">What's the down payment on the i20?</span><span class="when">2 DAYS</span></div>
+        <div class="miss f3"><span class="who">Mahesh Verma</span>
+          <span class="q">Can I come see the car tomorrow?</span><span class="when">BOUGHT ELSEWHERE</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--══════ PRODUCTS ══════-->
+<section class="sec" id="products" style="background:#F2ECE2">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">What we build</span>
+      <h2>Two products, live today.</h2>
+      <p class="lede">And a team that builds what's missing — same people, same phone number.</p>
+    </div>
+    <div class="prods">
+      <article class="prod rv">
+        <div class="idx">01</div>
+        <div>
+          <h3>WhatsApp Lead Manager<span class="badge">LIVE</span></h3>
+          <p>Every enquiry from your WhatsApp number in one inbox the whole team can see, with a named
+            owner on each lead and a record that outlives anyone's memory.</p>
+          <div class="feats"><span>Shared live inbox</span><span>Named lead owners</span>
+            <span>Admin · Manager · Agent roles</span><span>Saved templates</span>
+            <span>Official WhatsApp Business API</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </article>
+      <article class="prod rv">
+        <div class="idx">02</div>
+        <div>
+          <h3>Inventory<span class="badge">LIVE</span></h3>
+          <p>Stock, warehouses, vendors and billing in one system — with vendor bidding built into
+            procurement rather than bolted on afterwards.</p>
+          <div class="feats"><span>QR-tracked stock</span><span>Multi-warehouse</span>
+            <span>Vendor bidding</span><span>Purchase management</span><span>GST-ready</span>
+            <span>Billing via Zoho</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </article>
+      <article class="prod rv" id="custom">
+        <div class="idx">03</div>
+        <div>
+          <h3>Custom software</h3>
+          <p>When the tool your business needs doesn't exist, we build it around the way you already
+            work — not the other way round.</p>
+          <div class="feats"><span>Your process mapped first</span><span>Built for the people using it</span>
+            <span>You own the code</span><span>Supported by its authors</span></div>
+        </div>
+        <div class="arrow">→</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!--══════ STORY ══════-->
+<section class="sec ink" id="how">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">The same Saturday, with Nevyera</span>
+      <h2>Rohit asked at 9:14. Booked by 9:22.</h2>
+      <p class="lede">Nothing clever happened. The enquiry simply had somewhere to land, a name attached
+        to it, and a reply that didn't wait for a gap between customers.</p>
+    </div>
+    <div class="beats">
+      <div>
+        <div class="beat" data-beat="0">
+          <div class="clk">09:14</div>
+          <h3>It lands somewhere real</h3>
+          <p>The message reaches your business number and becomes a lead on its own — name, number,
+            and what was asked. Nobody had to write anything down.</p>
+        </div>
+        <div class="beat" data-beat="1">
+          <div class="clk">09:15</div>
+          <h3>Someone owns it</h3>
+          <p>Assigned to Priya. Her name is on it and the team can see that, so it stops being
+            everybody's problem and therefore nobody's.</p>
+        </div>
+        <div class="beat" data-beat="2">
+          <div class="clk">09:22</div>
+          <h3>It closes</h3>
+          <p>She replies from the shared inbox, books the test drive, and the lead moves to closed.
+            The conversation is still there next month, and next year.</p>
+        </div>
+        <div class="rv" style="padding-top:30px;border-top:1px solid rgba(235,227,214,.12)">
+          <div class="stat-hero">8</div>
+          <p class="stat-sub">Minutes from "is this available?" to a booked test drive. The alternative
+            was four hours — or never.</p>
+        </div>
+      </div>
+      <div class="pinned">
+        <div class="vz">
+          <div class="vzr" data-viz="0"><span class="t">09:14</span>
+            <span class="d"><b>Rohit Kumar</b><span>Captured as a lead</span></span></div>
+          <div class="vzr" data-viz="1"><span class="t">09:15</span>
+            <span class="d"><b>Assigned to Priya</b><span>Owner set · team notified</span></span></div>
+          <div class="vzr" data-viz="2"><span class="t">09:22</span>
+            <span class="d"><b>Test drive booked</b><span>Lead closed · history kept</span></span></div>
+          <div class="vzbar"><i id="vzbar"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--══════ PROOF ══════-->
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Why trust us</span>
+      <h2>We're new. Here's what you can check.</h2>
+      <p class="lede">We'd rather give you four things you can verify than a wall of logos you can't call.</p>
+    </div>
+    <div class="proof">
+      <div class="pf rv"><span class="n">01</span><h3>Official WhatsApp Business API</h3>
+        <p>Built on Meta's Cloud API — not an unofficial workaround that eventually gets your business
+          number banned. Your number stays yours.</p></div>
+      <div class="pf rv"><span class="n">02</span><h3>A team in India you can phone</h3>
+        <p>Support is a person in your timezone who knows the product, not a ticket queue and a
+          three-day wait for a templated reply.</p></div>
+      <div class="pf rv"><span class="n">03</span><h3>Your data belongs to you</h3>
+        <p>Export your leads and conversations whenever you like. Leaving is always possible — which is
+          precisely why we'll say it out loud.</p></div>
+      <div class="pf rv"><span class="n">04</span><h3>Running by this afternoon</h3>
+        <p>Connect your number, add your team, begin. No implementation project, no three-month
+          rollout, no consultant.</p></div>
+    </div>
+    <p class="note rv"><b>There are no testimonials on this page.</b> We don't have customers yet, and
+      inventing quotes from businesses that don't exist would be a strange way to ask you to trust us
+      with yours. When they're real, they'll be here with names and numbers you can ring.</p>
+  </div>
+</section>
+
+<!--══════ PRICING ══════-->
+<section class="sec" id="pricing" style="background:#F2ECE2">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Pricing</span>
+      <h2>Priced for a shop, not an enterprise.</h2>
+      <p class="lede">Every plan is the whole product. The tiers are about how many people and how many
+        leads — never about locking features away.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier rv"><div class="nm">Trial</div><div class="pr">₹0</div><div class="per">for 14 days</div>
+        <ul><li>2 team members</li><li>100 leads</li><li>The entire product</li><li>No card required</li></ul>
+        <a href="#demo" class="btn btn-o">Start free</a></div>
+      <div class="tier mid rv"><div class="nm">Basic</div><div class="pr">₹1,499</div><div class="per">per month</div>
+        <ul><li>5 team members</li><li>2,000 leads</li><li>Saved templates</li><li>Email support</li></ul>
+        <a href="#demo" class="btn btn-g">Book a demo</a></div>
+      <div class="tier rv"><div class="nm">Advance</div><div class="pr">₹3,999</div><div class="per">per month</div>
+        <ul><li>20 team members</li><li>Unlimited leads</li><li>Priority support</li><li>Onboarding call</li></ul>
+        <a href="#demo" class="btn btn-o">Book a demo</a></div>
+    </div>
+    <p class="cfg rv">Figures are placeholders — they live in content/pricing.ts behind a showPrices flag.</p>
+  </div>
+</section>
+
+<!--══════ CTA ══════-->
+<section class="sec ink" id="demo" style="position:relative;overflow:hidden">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="ctabox">
+      <div class="rv">
+        <span class="eyebrow">11:40 AM · the test drive</span>
+        <h2>See it on your own WhatsApp.</h2>
+        <p class="lede">Twenty minutes. We connect your number to a trial and walk through your real
+          enquiries — not a rehearsed demo account.</p>
+        <ul class="why"><li>No slide deck</li><li>You keep the trial afterwards</li>
+          <li>We'll tell you if it isn't a fit</li></ul>
+      </div>
+      <form class="rv" onsubmit="event.preventDefault();this.querySelector('button').textContent='Not wired up in this preview'">
+        <div class="field"><label for="n">Your name</label><input id="n" placeholder="Ujjwal Aggarwal"></div>
+        <div class="field"><label for="b">Business</label><input id="b" placeholder="Sharma Motors"></div>
+        <div class="field"><label for="w">WhatsApp number</label><input id="w" placeholder="+91 98765 43210"></div>
+        <div class="field"><label for="t">What do you run</label><select id="t">
+          <option>Car dealership</option><option>Clinic or hospital</option><option>Coaching centre</option>
+          <option>Retail shop</option><option>Something else</option></select></div>
+        <button type="submit" class="btn btn-g" style="width:100%;margin-top:32px">Book a demo</button>
+        <p class="fine">We reply on WhatsApp within one working day.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><div class="mark">Nevyera<span>.</span></div>
+        <p style="margin-top:16px;max-width:28ch;line-height:1.7">The software small businesses
+          actually run on.</p></div>
+      <div><h4>Products</h4><ul><li><a href="#products">WhatsApp Lead Manager</a></li>
+        <li><a href="#products">Inventory</a></li><li><a href="#custom">Custom software</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#about">About</a></li><li><a href="#pricing">Pricing</a></li>
+        <li><a href="#demo">Book a demo</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="#">Privacy policy</a></li><li><a href="#">Terms</a></li></ul></div>
+    </div>
+    <div class="base"><span>© 2026 Nevyera</span><span>Made in India</span></div>
+  </div>
+</footer>
+
+<script>
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('stuck',scrollY>40),{passive:true});
+
+/* ONE reveal observer — everything uses it */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+}),{threshold:.16,rootMargin:'0px 0px -60px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+/* eyebrows draw their hairline independently so section heads lead the content */
+const eio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in');eio.unobserve(e.target)}
+}),{threshold:1});
+document.querySelectorAll('.eyebrow').forEach(el=>eio.observe(el));
+
+/* ───── playground ───── */
+const thread=document.getElementById('thread'),leadsEl=document.getElementById('leads'),
+      emptyEl=document.getElementById('empty'),countEl=document.getElementById('count'),
+      form=document.getElementById('composer'),input=document.getElementById('msg');
+let count=126,sent=0;
+const NAMES=['Rohit Kumar','Anjali Sharma','Mahesh Verma','Deepa Nair','Imran Qureshi'];
+const AGENTS=['Priya','Arjun','Sana'];
+const REPLIES=["Yes, it's available. Shall I book you a test drive?",
+  "Happy to help — sending the full details now.",
+  "Of course. What time suits you tomorrow?",
+  "Let me confirm that and come straight back to you."];
+const now=()=>new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:false});
+
+function bubble(t,incoming){
+  const b=document.createElement('div');
+  b.className='cb'+(incoming?' in':'');b.textContent=t;
+  thread.appendChild(b);thread.scrollTop=thread.scrollHeight;
+}
+function send(text){
+  if(!text.trim())return;
+  const name=NAMES[sent%NAMES.length],agent=AGENTS[sent%AGENTS.length];sent++;
+  bubble(text,false);
+  if(emptyEl&&emptyEl.parentNode)emptyEl.remove();
+
+  const card=document.createElement('div');card.className='lead';
+  card.innerHTML=`<div class="lrow"><span class="lnm"></span><span class="ltm">${now()}</span>
+      <span class="pill p-new">NEW</span></div>
+    <div class="lmsg"></div><div class="lfoot"></div>`;
+  card.querySelector('.lnm').textContent=name;
+  card.querySelector('.lmsg').textContent=text;
+  leadsEl.prepend(card);
+  countEl.textContent=++count;
+
+  const pill=card.querySelector('.pill'),foot=card.querySelector('.lfoot');
+  setTimeout(()=>{pill.className='pill p-asg';pill.textContent='ASSIGNED';
+    foot.textContent=`Owner · ${agent}`;foot.classList.add('show')},900);
+  setTimeout(()=>bubble(REPLIES[(sent-1)%REPLIES.length],true),2000);
+  setTimeout(()=>{pill.className='pill p-cls';pill.textContent='REPLIED';
+    foot.textContent=`${agent} replied at ${now()}`},2500);
+}
+form.addEventListener('submit',e=>{e.preventDefault();send(input.value);input.value=''});
+document.getElementById('chips').addEventListener('click',e=>{
+  if(e.target.classList.contains('chip'))send(e.target.textContent)});
+setTimeout(()=>{if(!sent)send('Is the Creta 2022 available?')},1600);
+
+/* ───── scroll story ───── */
+const vz=[...document.querySelectorAll('.vzr')],bar=document.getElementById('vzbar');
+const beatIO=new IntersectionObserver(es=>es.forEach(e=>{
+  const i=+e.target.dataset.beat;
+  if(e.isIntersecting){
+    e.target.classList.add('on');
+    vz.forEach((r,j)=>r.classList.toggle('on',j<=i));
+    bar.style.width=((i+1)/3*100)+'%';
+  }else e.target.classList.remove('on');
+}),{threshold:.6});
+document.querySelectorAll('.beat').forEach(b=>beatIO.observe(b));
+</script>
+</body>
+</html>

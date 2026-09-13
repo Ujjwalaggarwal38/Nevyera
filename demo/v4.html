@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nevyera — Software your business runs on</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/*═══════════ SYSTEM ═══════════
+  ONE easing. ONE travel. ONE surface rule.
+  Surfaces are ALWAYS solid — no blur, no transparency, anywhere. */
+:root{
+  --obsidian:#14110E; --char:#1E1A16; --raise:#262119;
+  --ivory:#F7F3EC; --bone:#EBE3D6; --cream:#F2ECE2;
+  --gold:#C9A227; --brass:#DCC18A;
+  --taupe:#9A9186; --slate:#6E665C; --faint:#4A443C;
+  --hairD:#2E2820; --hairL:#E2D9CA;
+  --live:#4BAE7E;
+  --display:'Fraunces',Georgia,serif; --body:'Inter',system-ui,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --travel:26px; --slow:900ms; --mid:520ms; --fast:260ms;
+  --gut:clamp(22px,6vw,80px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ivory);color:var(--obsidian);font-family:var(--body);
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:var(--display);font-weight:300;letter-spacing:-.024em;line-height:1.04;margin:0;
+  font-variation-settings:'SOFT' 0,'WONK' 0}
+h1{font-size:clamp(40px,6.6vw,88px)}
+h2{font-size:clamp(30px,4.4vw,54px)}
+h3{font-size:clamp(18px,1.65vw,22px);font-weight:400;letter-spacing:-.018em}
+p{margin:0}
+em{font-style:italic;color:var(--brass)}
+a{color:inherit;text-decoration:none}
+button,input,select{font-family:inherit}
+::selection{background:var(--gold);color:var(--obsidian)}
+:focus-visible{outline:1.5px solid var(--gold);outline-offset:4px}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:var(--gut)}
+.sec{padding-block:clamp(84px,11vw,160px);position:relative}
+.ink{background:var(--obsidian);color:var(--bone)}
+.ink h1,.ink h2,.ink h3{color:var(--ivory)}
+
+/*──── scroll progress ────*/
+#prog{position:fixed;top:0;left:0;height:2px;width:0;background:var(--gold);z-index:99;
+  transition:width 90ms linear}
+
+/*──── SIGNATURE hairline ────*/
+.eyebrow{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--slate);margin-bottom:26px;padding-top:18px;position:relative}
+.eyebrow::before{content:"";position:absolute;top:0;left:0;height:1px;width:0;background:var(--gold);
+  transition:width 1100ms var(--ease)}
+.eyebrow.in::before{width:84px}
+.ink .eyebrow{color:var(--taupe)}
+.lede{font-size:clamp(15.5px,1.55vw,18px);line-height:1.75;color:var(--slate);max-width:50ch;margin-top:22px}
+.ink .lede{color:var(--taupe)}
+
+/*──── BUTTONS — ivory, gold sweep on hover ────*/
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-size:13.5px;font-weight:500;letter-spacing:.015em;padding:16px 32px;border:1px solid transparent;
+  cursor:pointer;border-radius:2px;overflow:hidden;isolation:isolate;
+  transition:color var(--fast) var(--ease),border-color var(--fast) var(--ease),transform var(--fast) var(--ease)}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--gold);
+  transform:scaleX(0);transform-origin:left;transition:transform 420ms var(--ease)}
+.btn:hover::before{transform:scaleX(1)}
+.btn:hover{transform:translateY(-1px)}
+.btn-1{background:var(--ivory);color:var(--obsidian)}
+.btn-1:hover{color:var(--obsidian)}
+.btn-2{border-color:var(--hairD);color:var(--bone);background:transparent}
+.btn-2:hover{color:var(--obsidian);border-color:var(--gold)}
+.on-light .btn-1,.light .btn-1{background:var(--obsidian);color:var(--ivory)}
+.light .btn-2{border-color:var(--hairL);color:var(--obsidian)}
+
+/*──── NAV — solid, never glass ────*/
+.nav{position:fixed;top:0;left:0;right:0;z-index:90;border-bottom:1px solid transparent;
+  transition:background var(--mid) var(--ease),border-color var(--mid) var(--ease)}
+.nav.stuck{background:var(--obsidian);border-bottom-color:var(--hairD)}
+.nav .wrap{display:flex;align-items:center;gap:36px;height:80px}
+.mark{font-family:var(--display);font-weight:400;font-size:23px;letter-spacing:-.03em;
+  color:var(--ivory);line-height:1;margin-right:auto}
+.mark span{color:var(--gold)}
+.nav ul{display:flex;gap:34px;list-style:none;margin:0;padding:0;font-size:13.5px;color:var(--taupe)}
+.nav ul a{position:relative;transition:color var(--fast) var(--ease)}
+.nav ul a::after{content:"";position:absolute;left:0;bottom:-7px;height:1px;width:0;background:var(--gold);
+  transition:width var(--mid) var(--ease)}
+.nav ul a:hover{color:var(--ivory)}
+.nav ul a:hover::after{width:100%}
+
+/*──── HERO ────*/
+.hero{background:var(--obsidian);color:var(--bone);position:relative;overflow:hidden;
+  padding-block:clamp(150px,18vw,220px) clamp(80px,10vw,130px)}
+.glow{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(60% 44% at 20% 4%,rgba(201,162,39,.12),transparent 70%),
+             radial-gradient(48% 42% at 90% 88%,rgba(201,162,39,.05),transparent 68%)}
+.hero .wrap{position:relative;z-index:2}
+.hero h1{max-width:16ch}
+/* word-by-word entrance */
+.w{display:inline-block;opacity:0;transform:translateY(.5em);
+  animation:wordIn 1000ms var(--ease) forwards}
+@keyframes wordIn{to{opacity:1;transform:none}}
+.hero .lede{max-width:48ch}
+.hcta{display:flex;gap:14px;margin-top:44px;flex-wrap:wrap;align-items:center}
+.fine{font-size:12.5px;color:var(--slate);margin-top:24px}
+.fine b{color:var(--brass);font-weight:500}
+/* three pillars under hero */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:clamp(56px,8vw,92px);
+  border-top:1px solid var(--hairD)}
+.pil{padding:28px 30px 0 0;border-right:1px solid var(--hairD)}
+.pil:last-child{border-right:none}
+.pil:not(:first-child){padding-left:30px}
+.pil .k{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--gold);margin-bottom:12px}
+.pil h3{margin-bottom:8px;font-size:17px}
+.pil p{font-size:13px;color:var(--slate);line-height:1.6}
+
+/*──── SHOWCASE (tabbed, the centrepiece) ────*/
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--hairD);margin-top:48px;flex-wrap:wrap}
+.tab{background:none;border:none;cursor:pointer;padding:18px 30px 18px 0;margin-right:30px;
+  font-size:15px;color:var(--slate);position:relative;
+  transition:color var(--fast) var(--ease);font-family:var(--display);font-weight:400}
+.tab:last-child{margin-right:0}
+.tab::after{content:"";position:absolute;left:0;bottom:-1px;height:1px;width:0;background:var(--gold);
+  transition:width var(--mid) var(--ease)}
+.tab:hover{color:var(--bone)}
+.tab[aria-selected="true"]{color:var(--ivory)}
+.tab[aria-selected="true"]::after{width:calc(100% - 30px)}
+.tab .st{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--faint);margin-top:5px}
+.tab[aria-selected="true"] .st{color:var(--gold)}
+.pane{display:none;padding-top:44px}
+.pane.on{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(30px,5vw,70px);
+  animation:paneIn 600ms var(--ease) both}
+@keyframes paneIn{from{opacity:0;transform:translateY(var(--travel))}to{opacity:1;transform:none}}
+.pane h3{font-size:clamp(22px,2.4vw,30px);margin-bottom:14px}
+.pane .body{font-size:14.5px;color:var(--taupe);line-height:1.75;max-width:40ch}
+.feats{display:flex;flex-direction:column;margin-top:26px}
+.feats span{font-size:13px;color:var(--slate);padding:11px 0;border-top:1px solid var(--hairD)}
+.feats span:last-child{border-bottom:1px solid var(--hairD)}
+
+/*── SOLID panel: the ONE surface rule ──*/
+.panel{background:var(--char);border:1px solid var(--hairD);border-radius:3px;padding:22px}
+.ptop{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;
+  border-bottom:1px solid var(--hairD);margin-bottom:16px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--slate)}
+.ptop b{color:var(--gold);font-weight:400}
+.num{font-family:var(--display);font-size:22px;color:var(--ivory);font-weight:400;
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+/* lead demo */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.colh{font-family:var(--mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--faint);padding-bottom:10px;margin-bottom:13px;border-bottom:1px solid var(--hairD);
+  display:flex;justify-content:space-between;align-items:baseline}
+.thread{display:flex;flex-direction:column;gap:9px;min-height:150px;max-height:180px;overflow-y:auto;padding-right:5px}
+.cb{max-width:92%;font-size:12.5px;line-height:1.55;padding:10px 13px;align-self:flex-end;
+  background:var(--raise);color:var(--ivory);border-radius:3px;border-left:1px solid var(--gold);
+  animation:rise var(--mid) var(--ease) both}
+.cb.inb{align-self:flex-start;background:transparent;border:1px solid var(--hairD);
+  border-left:1px solid var(--hairD);color:var(--taupe)}
+@keyframes rise{from{opacity:0;transform:translateY(var(--travel))}to{opacity:1;transform:none}}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0 11px}
+.chip{font-size:11px;padding:7px 12px;border:1px solid var(--hairD);background:transparent;
+  color:var(--slate);cursor:pointer;border-radius:2px;
+  transition:border-color var(--fast) var(--ease),color var(--fast) var(--ease)}
+.chip:hover{border-color:var(--gold);color:var(--brass)}
+.composer{display:flex;gap:8px;margin-top:auto}
+.composer input{flex:1;min-width:0;background:var(--obsidian);border:1px solid var(--hairD);
+  color:var(--ivory);padding:12px 14px;font-size:13px;border-radius:2px;
+  transition:border-color var(--fast) var(--ease)}
+.composer input::placeholder{color:var(--faint)}
+.composer input:focus{outline:none;border-color:var(--gold)}
+.send{width:44px;border:none;background:var(--ivory);color:var(--obsidian);cursor:pointer;
+  display:grid;place-items:center;border-radius:2px;flex:none;transition:background var(--fast) var(--ease)}
+.send:hover{background:var(--gold)}
+.send svg{width:15px;height:15px;fill:currentColor}
+.leads{display:flex;flex-direction:column;gap:9px;min-height:208px;max-height:244px;overflow-y:auto;padding-right:5px}
+.lead{border:1px solid var(--hairD);border-left:1px solid var(--gold);padding:13px;border-radius:2px;
+  animation:rise var(--mid) var(--ease) both;background:var(--obsidian)}
+.lrow{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.lnm{font-size:12.5px;color:var(--ivory);font-weight:500}
+.ltm{font-family:var(--mono);font-size:9px;color:var(--faint)}
+.pill{margin-left:auto;font-family:var(--mono);font-size:8.5px;letter-spacing:.14em;transition:color var(--mid) var(--ease)}
+.p-new{color:var(--gold)}.p-asg{color:var(--live)}.p-cls{color:var(--slate)}
+.lmsg{font-size:12px;color:var(--taupe);line-height:1.55}
+.lfoot{font-size:11px;color:var(--slate);margin-top:9px;padding-top:9px;border-top:1px solid var(--hairD);
+  opacity:0;max-height:0;overflow:hidden;transition:opacity var(--mid) var(--ease),max-height var(--mid) var(--ease)}
+.lfoot.show{opacity:1;max-height:40px}
+.empty{color:var(--faint);font-size:12px;text-align:center;padding:56px 14px;line-height:1.9}
+.empty b{display:block;color:var(--slate);margin-bottom:6px;font-family:var(--display);font-size:15px;font-weight:400}
+
+/* inventory demo */
+.inv-top{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hairD);
+  border:1px solid var(--hairD);margin-bottom:18px}
+.wh{background:var(--char);padding:15px 14px}
+.wh .l{font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;color:var(--faint);text-transform:uppercase}
+.wh .v{font-family:var(--display);font-size:26px;color:var(--ivory);font-weight:300;margin-top:6px;
+  font-variant-numeric:tabular-nums;transition:color var(--fast) var(--ease)}
+.wh .v.hit{color:var(--gold)}
+.acts{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap}
+.act{font-size:12px;padding:10px 16px;border:1px solid var(--hairD);background:transparent;color:var(--bone);
+  cursor:pointer;border-radius:2px;transition:border-color var(--fast) var(--ease),color var(--fast) var(--ease)}
+.act:hover{border-color:var(--gold);color:var(--brass)}
+.log{display:flex;flex-direction:column;gap:0;min-height:184px;max-height:214px;overflow-y:auto}
+.lg{display:flex;gap:13px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--hairD);
+  font-size:12px;animation:rise var(--mid) var(--ease) both}
+.lg .t{font-family:var(--mono);font-size:9px;color:var(--faint);min-width:44px}
+.lg .m{color:var(--taupe);flex:1}
+.lg .m b{color:var(--ivory);font-weight:500}
+.lg .amt{font-family:var(--mono);font-size:11px;color:var(--slate)}
+.lg.best .amt{color:var(--gold)}
+.lg.best .m b{color:var(--gold)}
+
+/* custom demo */
+.picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.pk{font-size:12px;padding:9px 15px;border:1px solid var(--hairD);background:transparent;color:var(--slate);
+  cursor:pointer;border-radius:2px;transition:all var(--fast) var(--ease)}
+.pk:hover{color:var(--bone)}
+.pk.sel{border-color:var(--gold);color:var(--obsidian);background:var(--gold)}
+.blue{min-height:200px}
+.bl{display:flex;gap:14px;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--hairD);
+  animation:rise var(--mid) var(--ease) both}
+.bl .n{font-family:var(--mono);font-size:9px;color:var(--gold);min-width:26px}
+.bl .x{font-size:13px;color:var(--taupe)}
+.bl .x b{display:block;color:var(--ivory);font-weight:500;font-size:13.5px;margin-bottom:2px}
+
+/*──── STORY ────*/
+.beats{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,6vw,90px);align-items:start;margin-top:52px}
+.beat{padding-block:clamp(44px,8vh,88px);opacity:.24;transition:opacity var(--slow) var(--ease)}
+.beat.on{opacity:1}
+.beat .clk{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;color:var(--gold);margin-bottom:14px}
+.beat p{font-size:14.5px;color:var(--taupe);line-height:1.75;max-width:42ch;margin-top:12px}
+.pinned{position:sticky;top:132px}
+.vzr{display:flex;gap:14px;align-items:baseline;padding:17px 0;border-bottom:1px solid var(--hairD);
+  opacity:.24;transition:opacity var(--slow) var(--ease)}
+.vzr:last-of-type{border-bottom:none}
+.vzr.on{opacity:1}
+.vzr .t{font-family:var(--mono);font-size:10.5px;color:var(--gold);letter-spacing:.12em;min-width:56px}
+.vzr .d b{display:block;font-size:13.5px;color:var(--ivory);font-weight:500}
+.vzr .d span{font-size:12.5px;color:var(--slate)}
+.vzbar{height:1px;background:var(--hairD);margin-top:20px;position:relative}
+.vzbar i{position:absolute;left:0;top:0;height:1px;background:var(--gold);width:0;transition:width var(--slow) var(--ease)}
+.stat{font-family:var(--display);font-size:clamp(60px,10vw,132px);font-weight:300;color:var(--gold);
+  line-height:.88;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.stat-sub{font-size:14.5px;color:var(--taupe);max-width:34ch;margin-top:18px}
+
+/*──── PROBLEM ────*/
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,6vw,96px);align-items:center}
+.miss{padding:20px 0;border-bottom:1px solid var(--hairL);display:flex;gap:18px;align-items:baseline}
+.miss:first-child{border-top:1px solid var(--hairL)}
+.miss .who{font-size:14px;font-weight:500;min-width:126px}
+.miss .q{font-size:13.5px;color:var(--slate);flex:1}
+.miss .when{font-family:var(--mono);font-size:10.5px;color:#A8543F;letter-spacing:.06em;white-space:nowrap}
+.miss.f2{opacity:.6}.miss.f3{opacity:.36}
+
+/*──── PROOF ────*/
+.proof{display:grid;grid-template-columns:repeat(2,1fr);margin-top:54px;
+  border-top:1px solid var(--hairL);border-left:1px solid var(--hairL)}
+.pf{padding:clamp(26px,3.4vw,44px);border-right:1px solid var(--hairL);border-bottom:1px solid var(--hairL);
+  transition:background var(--mid) var(--ease)}
+.pf:hover{background:var(--cream)}
+.pf h3{margin-bottom:11px}
+.pf p{font-size:14px;color:var(--slate);line-height:1.72}
+.pf .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--gold);display:block;margin-bottom:16px}
+.note{margin-top:44px;padding-left:28px;border-left:1px solid var(--gold);font-size:14px;
+  color:var(--slate);max-width:64ch;line-height:1.75}
+.note b{color:var(--obsidian);font-weight:500}
+
+/*──── PRICING ────*/
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);margin-top:54px;border-top:1px solid var(--hairL)}
+.tier{padding:clamp(28px,3.4vw,44px) clamp(22px,2.6vw,34px);border-bottom:1px solid var(--hairL);
+  border-right:1px solid var(--hairL);transition:background var(--mid) var(--ease)}
+.tier:first-child{border-left:1px solid var(--hairL)}
+.tier:hover{background:var(--cream)}
+.tier.mid{background:var(--obsidian);color:var(--bone);border-color:var(--obsidian)}
+.tier.mid:hover{background:var(--char)}
+.tier.mid .nm{color:var(--brass)}.tier.mid .pr{color:var(--ivory)}
+.tier.mid li{color:var(--taupe);border-top-color:var(--hairD)}.tier.mid .per{color:var(--slate)}
+.tier .nm{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--slate)}
+.tier .pr{font-family:var(--display);font-size:clamp(36px,4.2vw,50px);font-weight:300;margin:16px 0 3px;
+  letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.tier .per{font-size:12.5px;color:var(--slate);margin-bottom:26px}
+.tier ul{list-style:none;padding:0;margin:0 0 30px;font-size:13.5px;color:var(--slate)}
+.tier li{padding:9px 0;border-top:1px solid var(--hairL)}
+.tier .btn{width:100%}
+.cfg{margin-top:26px;font-family:var(--mono);font-size:11px;color:var(--slate)}
+
+/*──── CTA ────*/
+.ctabox{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,6vw,90px);align-items:start}
+.field{border-bottom:1px solid var(--hairD);padding:14px 0;transition:border-color var(--fast) var(--ease)}
+.field:focus-within{border-bottom-color:var(--gold)}
+.field label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--slate);margin-bottom:8px}
+.field input,.field select{width:100%;background:transparent;border:none;color:var(--ivory);font-size:15px;padding:0;outline:none}
+.field input::placeholder{color:var(--faint)}
+.field select option{background:var(--char)}
+.why{list-style:none;padding:0;margin:32px 0 0}
+.why li{padding:14px 0;border-top:1px solid var(--hairD);font-size:14px;color:var(--taupe)}
+
+/*──── FOOTER ────*/
+footer{background:var(--obsidian);color:var(--slate);padding-block:72px 34px;font-size:13.5px;
+  border-top:1px solid var(--hairD)}
+footer .cols{display:grid;grid-template-columns:1.7fr repeat(3,1fr);gap:40px}
+footer .mark{font-size:26px;margin:0}
+footer h4{font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--faint);margin:0 0 18px;font-weight:400}
+footer ul{list-style:none;padding:0;margin:0}
+footer li{margin-bottom:11px}
+footer a{transition:color var(--fast) var(--ease)}
+footer a:hover{color:var(--brass)}
+footer .base{margin-top:56px;padding-top:26px;border-top:1px solid var(--hairD);display:flex;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--faint)}
+
+/*──── THE ONE REVEAL ────*/
+.rv{opacity:0;transform:translateY(var(--travel));
+  transition:opacity var(--slow) var(--ease),transform var(--slow) var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+@media(max-width:1000px){
+  .pane.on,.duo,.beats,.row2,.ctabox,.proof,.tiers,.pillars,.inv-top{grid-template-columns:1fr}
+  .pinned{position:static}
+  .beat{opacity:1;padding-block:28px}
+  .nav ul{display:none}
+  .pil{border-right:none;border-bottom:1px solid var(--hairD);padding:22px 0!important}
+  .pil:last-child{border-bottom:none}
+  .proof{border-left:none}.pf{border-right:none}
+  .tier{border-left:1px solid var(--hairL)}
+  .miss{flex-direction:column;gap:5px}
+  .tab{padding-right:0;margin-right:22px}
+  footer .cols{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){footer .cols{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .rv,.w{opacity:1;transform:none}.beat,.vzr{opacity:1}
+}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a href="#top" class="mark">Nevyera<span>.</span></a>
+    <ul>
+      <li><a href="#solutions">Solutions</a></li><li><a href="#how">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li><li><a href="#about">About</a></li>
+    </ul>
+    <a href="#demo" class="btn btn-1">Book a demo</a>
+  </div>
+</nav>
+
+<!--══ HERO — the company, not the product ══-->
+<header class="hero" id="top">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <span class="eyebrow">Nevyera · Business software, built in India</span>
+    <h1 id="h1"></h1>
+    <p class="lede rv">We build the systems small businesses actually run on — the enquiries you
+      can't lose, the stock you can't miscount, and the tools nobody has written for you yet.</p>
+    <div class="hcta rv">
+      <a href="#solutions" class="btn btn-1">See what we build</a>
+      <a href="#demo" class="btn btn-2">Book a demo</a>
+    </div>
+    <p class="fine rv">Two products live today · <b>Custom work</b> from the same team</p>
+
+    <div class="pillars">
+      <div class="pil rv"><div class="k">01</div><h3>Lead management</h3>
+        <p>Every WhatsApp enquiry captured, owned by a named person, and closed.</p></div>
+      <div class="pil rv"><div class="k">02</div><h3>Inventory</h3>
+        <p>Stock, warehouses and vendors — with bidding built into procurement.</p></div>
+      <div class="pil rv"><div class="k">03</div><h3>Custom software</h3>
+        <p>When the tool your business needs doesn't exist yet, we build it.</p></div>
+    </div>
+  </div>
+</header>
+
+<!--══ SHOWCASE ══-->
+<section class="sec ink" id="solutions" style="border-top:1px solid var(--hairD)">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Three solutions</span>
+      <h2>Try them before you talk to us.</h2>
+      <p class="lede">These aren't screenshots. Each one runs right here — click through and use them.</p>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-pane="lead">
+        Lead Manager<span class="st">LIVE</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="inv">
+        Inventory<span class="st">LIVE</span></button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="cus">
+        Custom software<span class="st">BESPOKE</span></button>
+    </div>
+
+    <!-- LEAD -->
+    <div class="pane on" id="pane-lead">
+      <div>
+        <h3>Nothing depends on someone remembering.</h3>
+        <p class="body">An enquiry reaches your WhatsApp number and becomes a lead on its own — with a
+          name on it, visible to the whole team, and a record that outlives anybody's memory.</p>
+        <div class="feats"><span>Shared live inbox</span><span>Named lead owners</span>
+          <span>Admin · Manager · Agent roles</span><span>Saved reply templates</span>
+          <span>Official WhatsApp Business API</span></div>
+      </div>
+      <div class="panel">
+        <div class="ptop"><span>Live · type anything</span><b>Sharma Motors</b></div>
+        <div class="duo">
+          <div style="display:flex;flex-direction:column">
+            <div class="colh"><span>You · the customer</span></div>
+            <div class="thread" id="thread"></div>
+            <div class="chips" id="chips">
+              <button class="chip">Is the Creta 2022 available?</button>
+              <button class="chip">Down payment on the i20?</button>
+            </div>
+            <form class="composer" id="composer">
+              <input id="msg" placeholder="Write a message…" autocomplete="off" aria-label="Message the dealership">
+              <button class="send" type="submit" aria-label="Send">
+                <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></button>
+            </form>
+          </div>
+          <div style="display:flex;flex-direction:column">
+            <div class="colh"><span>In Nevyera</span><span class="num" id="count">126</span></div>
+            <div class="leads" id="leads">
+              <div class="empty" id="empty"><b>Nothing here yet</b>Send a message and watch it become a lead.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVENTORY -->
+    <div class="pane" id="pane-inv">
+      <div>
+        <h3>Vendors bid. You don't chase quotes.</h3>
+        <p class="body">Stock moves by QR across every warehouse, and when you need to reorder, your
+          vendors compete for the order instead of you ringing round for prices.</p>
+        <div class="feats"><span>QR-tracked stock movement</span><span>Multi-warehouse</span>
+          <span>Vendor bidding on purchase needs</span><span>Vendor &amp; purchase management</span>
+          <span>GST-ready</span><span>Billing through Zoho</span></div>
+      </div>
+      <div class="panel">
+        <div class="ptop"><span>Live · brake pads, set of 4</span><b>SKU BP-4417</b></div>
+        <div class="inv-top">
+          <div class="wh"><div class="l">Warehouse A</div><div class="v" id="whA">42</div></div>
+          <div class="wh"><div class="l">Warehouse B</div><div class="v" id="whB">17</div></div>
+          <div class="wh"><div class="l">In transit</div><div class="v" id="whT">0</div></div>
+        </div>
+        <div class="acts">
+          <button class="act" id="scanOut">Scan QR · issue 5</button>
+          <button class="act" id="askBids">Request vendor bids</button>
+        </div>
+        <div class="log" id="log">
+          <div class="lg"><span class="t">—</span><span class="m">Scan a QR or request bids to see the ledger move.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUSTOM -->
+    <div class="pane" id="pane-cus">
+      <div>
+        <h3>Built around how you already work.</h3>
+        <p class="body">Most business software asks you to change your process to suit it. We map what
+          you actually do first, then build to that. You own the code at the end.</p>
+        <div class="feats"><span>Your process mapped first</span><span>Built for the people using it</span>
+          <span>You own the code</span><span>Supported by the people who wrote it</span></div>
+      </div>
+      <div class="panel">
+        <div class="ptop"><span>What would we build you?</span><b>Pick a business</b></div>
+        <div class="picker" id="picker">
+          <button class="pk sel" data-k="clinic">Clinic</button>
+          <button class="pk" data-k="dealer">Car dealership</button>
+          <button class="pk" data-k="coach">Coaching centre</button>
+          <button class="pk" data-k="retail">Retail shop</button>
+        </div>
+        <div class="blue" id="blue"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--══ PROBLEM ══-->
+<section class="sec light">
+  <div class="wrap">
+    <div class="row2">
+      <div class="rv">
+        <span class="eyebrow">Saturday, 9:14 AM</span>
+        <h2>Three people asked to buy something.</h2>
+        <p class="lede">They messaged the number on your board. It reached someone's personal WhatsApp,
+          read between customers, answered when there was a gap. By Monday nobody could say which were
+          lost — because nothing recorded that they existed.</p>
+      </div>
+      <div class="rv">
+        <div class="miss"><span class="who">Rohit Kumar</span>
+          <span class="q">Is the Creta 2022 still available?</span><span class="when">4 HOURS</span></div>
+        <div class="miss f2"><span class="who">Anjali Sharma</span>
+          <span class="q">What's the down payment on the i20?</span><span class="when">2 DAYS</span></div>
+        <div class="miss f3"><span class="who">Mahesh Verma</span>
+          <span class="q">Can I come see the car tomorrow?</span><span class="when">BOUGHT ELSEWHERE</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--══ STORY ══-->
+<section class="sec ink" id="how">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">The same Saturday, with Nevyera</span>
+      <h2>Rohit asked at 9:14. Booked by 9:22.</h2>
+      <p class="lede">Nothing clever happened. The enquiry simply had somewhere to land, a name attached
+        to it, and a reply that didn't wait for a gap between customers.</p>
+    </div>
+    <div class="beats">
+      <div>
+        <div class="beat" data-beat="0"><div class="clk">09:14</div>
+          <h3>It lands somewhere real</h3>
+          <p>The message reaches your business number and becomes a lead on its own — name, number and
+            what was asked. Nobody had to write anything down.</p></div>
+        <div class="beat" data-beat="1"><div class="clk">09:15</div>
+          <h3>Someone owns it</h3>
+          <p>Assigned to Priya. Her name is on it and the team can see that, so it stops being
+            everybody's problem and therefore nobody's.</p></div>
+        <div class="beat" data-beat="2"><div class="clk">09:22</div>
+          <h3>It closes</h3>
+          <p>She replies from the shared inbox, books the test drive, and the lead moves to closed.
+            The conversation is still there next month, and next year.</p></div>
+        <div class="rv" style="padding-top:30px;border-top:1px solid var(--hairD)">
+          <div class="stat" data-count="8">0</div>
+          <p class="stat-sub">Minutes from "is this available?" to a booked test drive. The alternative
+            was four hours — or never.</p>
+        </div>
+      </div>
+      <div class="pinned">
+        <div class="panel">
+          <div class="vzr" data-viz="0"><span class="t">09:14</span>
+            <span class="d"><b>Rohit Kumar</b><span>Captured as a lead</span></span></div>
+          <div class="vzr" data-viz="1"><span class="t">09:15</span>
+            <span class="d"><b>Assigned to Priya</b><span>Owner set · team notified</span></span></div>
+          <div class="vzr" data-viz="2"><span class="t">09:22</span>
+            <span class="d"><b>Test drive booked</b><span>Lead closed · history kept</span></span></div>
+          <div class="vzbar"><i id="vzbar"></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--══ PROOF ══-->
+<section class="sec light" id="about">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Why trust us</span>
+      <h2>We're new. Here's what you can check.</h2>
+      <p class="lede">Four things you can verify, instead of a wall of logos you can't call.</p>
+    </div>
+    <div class="proof">
+      <div class="pf rv"><span class="n">01</span><h3>Official WhatsApp Business API</h3>
+        <p>Built on Meta's Cloud API — not an unofficial workaround that eventually gets your business
+          number banned. Your number stays yours.</p></div>
+      <div class="pf rv"><span class="n">02</span><h3>A team in India you can phone</h3>
+        <p>Support is a person in your timezone who knows the product, not a ticket queue and a
+          three-day wait for a templated reply.</p></div>
+      <div class="pf rv"><span class="n">03</span><h3>Your data belongs to you</h3>
+        <p>Export your leads, stock and conversations whenever you like. Leaving is always possible —
+          which is precisely why we'll say it out loud.</p></div>
+      <div class="pf rv"><span class="n">04</span><h3>Running by this afternoon</h3>
+        <p>Connect your number, add your team, begin. No implementation project, no three-month
+          rollout, no consultant.</p></div>
+    </div>
+    <p class="note rv"><b>There are no testimonials on this page.</b> We don't have customers yet, and
+      inventing quotes from businesses that don't exist would be a strange way to ask you to trust us
+      with yours. When they're real, they'll be here with names and numbers you can ring.</p>
+  </div>
+</section>
+
+<!--══ PRICING ══-->
+<section class="sec light" id="pricing" style="background:var(--cream)">
+  <div class="wrap">
+    <div class="rv">
+      <span class="eyebrow">Pricing</span>
+      <h2>Priced for a shop, not an enterprise.</h2>
+      <p class="lede">Every plan is the whole product. The tiers are about how many people and how many
+        records — never about locking features away.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier rv"><div class="nm">Trial</div><div class="pr">₹0</div><div class="per">for 14 days</div>
+        <ul><li>2 team members</li><li>100 leads</li><li>The entire product</li><li>No card required</li></ul>
+        <a href="#demo" class="btn btn-2">Start free</a></div>
+      <div class="tier mid rv"><div class="nm">Basic</div><div class="pr">₹1,499</div><div class="per">per month</div>
+        <ul><li>5 team members</li><li>2,000 leads</li><li>Saved templates</li><li>Email support</li></ul>
+        <a href="#demo" class="btn btn-1">Book a demo</a></div>
+      <div class="tier rv"><div class="nm">Advance</div><div class="pr">₹3,999</div><div class="per">per month</div>
+        <ul><li>20 team members</li><li>Unlimited leads</li><li>Priority support</li><li>Onboarding call</li></ul>
+        <a href="#demo" class="btn btn-2">Book a demo</a></div>
+    </div>
+    <p class="cfg rv">Figures are placeholders — they live in content/pricing.ts behind a showPrices flag.</p>
+  </div>
+</section>
+
+<!--══ CTA ══-->
+<section class="sec ink" id="demo" style="position:relative;overflow:hidden">
+  <div class="glow" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="ctabox">
+      <div class="rv">
+        <span class="eyebrow">The next step</span>
+        <h2>See it on your own numbers.</h2>
+        <p class="lede">Twenty minutes. We connect your WhatsApp number or load your stock list into a
+          trial and walk through your real data — not a rehearsed demo account.</p>
+        <ul class="why"><li>No slide deck</li><li>You keep the trial afterwards</li>
+          <li>We'll tell you if it isn't a fit</li></ul>
+      </div>
+      <form class="rv" onsubmit="event.preventDefault();this.querySelector('button').textContent='Not wired up in this preview'">
+        <div class="field"><label for="n">Your name</label><input id="n" placeholder="Ujjwal Aggarwal"></div>
+        <div class="field"><label for="b">Business</label><input id="b" placeholder="Sharma Motors"></div>
+        <div class="field"><label for="w">WhatsApp number</label><input id="w" placeholder="+91 98765 43210"></div>
+        <div class="field"><label for="t">What do you need</label><select id="t">
+          <option>Lead management</option><option>Inventory</option>
+          <option>Both</option><option>Something custom</option></select></div>
+        <button type="submit" class="btn btn-1" style="width:100%;margin-top:32px">Book a demo</button>
+        <p class="fine">We reply on WhatsApp within one working day.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><div class="mark">Nevyera<span>.</span></div>
+        <p style="margin-top:16px;max-width:28ch;line-height:1.7">The software small businesses
+          actually run on.</p></div>
+      <div><h4>Solutions</h4><ul><li><a href="#solutions">Lead Manager</a></li>
+        <li><a href="#solutions">Inventory</a></li><li><a href="#solutions">Custom software</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#about">About</a></li><li><a href="#pricing">Pricing</a></li>
+        <li><a href="#demo">Book a demo</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="#">Privacy policy</a></li><li><a href="#">Terms</a></li></ul></div>
+    </div>
+    <div class="base"><span>© 2026 Nevyera</span><span>Made in India</span></div>
+  </div>
+</footer>
+
+<script>
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* headline, word by word */
+const H='The software your business actually runs on.';
+document.getElementById('h1').innerHTML=H.split(' ').map((w,i)=>{
+  const last=w==='on.';
+  return `<span class="w" style="animation-delay:${160+i*70}ms">${last?'<em>'+w+'</em>':w}</span>`;
+}).join(' ');
+
+/* scroll progress */
+const prog=document.getElementById('prog'),nav=document.getElementById('nav');
+addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-innerHeight;
+  prog.style.width=(h>0?scrollY/h*100:0)+'%';
+  nav.classList.toggle('stuck',scrollY>40);
+},{passive:true});
+
+/* ONE reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+}),{threshold:.15,rootMargin:'0px 0px -50px'});
+document.querySelectorAll('.rv, .eyebrow').forEach(el=>io.observe(el));
+
+/* count-up */
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return; cio.unobserve(e.target);
+  const el=e.target,to=+el.dataset.count,t0=performance.now();
+  (function step(t){
+    const p=Math.min((t-t0)/1100,1), v=Math.round(to*(1-Math.pow(1-p,3)));
+    el.textContent=v; if(p<1)requestAnimationFrame(step);
+  })(t0);
+}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+/* tabs */
+const tabs=[...document.querySelectorAll('.tab')];
+tabs.forEach(t=>t.addEventListener('click',()=>{
+  tabs.forEach(x=>x.setAttribute('aria-selected',String(x===t)));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pane-'+t.dataset.pane).classList.add('on');
+}));
+
+/* ───── lead demo ───── */
+const thread=document.getElementById('thread'),leadsEl=document.getElementById('leads'),
+      countEl=document.getElementById('count'),form=document.getElementById('composer'),
+      input=document.getElementById('msg');
+let empty=document.getElementById('empty'),count=126,sent=0;
+const NAMES=['Rohit Kumar','Anjali Sharma','Mahesh Verma','Deepa Nair','Imran Qureshi'];
+const AGENTS=['Priya','Arjun','Sana'];
+const REPLIES=["Yes, it's available. Shall I book you a test drive?",
+  "Happy to help — sending the full details now.","Of course. What time suits you tomorrow?",
+  "Let me confirm that and come straight back to you."];
+const clock=()=>new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:false});
+function bubble(t,inb){const b=document.createElement('div');b.className='cb'+(inb?' inb':'');
+  b.textContent=t;thread.appendChild(b);thread.scrollTop=thread.scrollHeight}
+function send(text){
+  if(!text.trim())return;
+  const name=NAMES[sent%NAMES.length],agent=AGENTS[sent%AGENTS.length];sent++;
+  bubble(text,false);
+  if(empty){empty.remove();empty=null}
+  const c=document.createElement('div');c.className='lead';
+  c.innerHTML=`<div class="lrow"><span class="lnm"></span><span class="ltm">${clock()}</span>
+    <span class="pill p-new">NEW</span></div><div class="lmsg"></div><div class="lfoot"></div>`;
+  c.querySelector('.lnm').textContent=name;c.querySelector('.lmsg').textContent=text;
+  leadsEl.prepend(c);countEl.textContent=++count;
+  const pill=c.querySelector('.pill'),foot=c.querySelector('.lfoot');
+  setTimeout(()=>{pill.className='pill p-asg';pill.textContent='ASSIGNED';
+    foot.textContent='Owner · '+agent;foot.classList.add('show')},900);
+  setTimeout(()=>bubble(REPLIES[(sent-1)%REPLIES.length],true),2000);
+  setTimeout(()=>{pill.className='pill p-cls';pill.textContent='REPLIED';
+    foot.textContent=agent+' replied at '+clock()},2500);
+}
+form.addEventListener('submit',e=>{e.preventDefault();send(input.value);input.value=''});
+document.getElementById('chips').addEventListener('click',e=>{
+  if(e.target.classList.contains('chip'))send(e.target.textContent)});
+setTimeout(()=>{if(!sent)send('Is the Creta 2022 available?')},1700);
+
+/* ───── inventory demo ───── */
+const whA=document.getElementById('whA'),whB=document.getElementById('whB'),
+      whT=document.getElementById('whT'),logEl=document.getElementById('log');
+let stockA=42,stockB=17,transit=0,logSeeded=false;
+function logLine(msg,amt,best){
+  if(!logSeeded){logEl.innerHTML='';logSeeded=true}
+  const d=document.createElement('div');d.className='lg'+(best?' best':'');
+  d.innerHTML=`<span class="t">${clock()}</span><span class="m">${msg}</span><span class="amt">${amt||''}</span>`;
+  logEl.prepend(d);
+}
+function bump(el,val){el.textContent=val;el.classList.add('hit');setTimeout(()=>el.classList.remove('hit'),700)}
+document.getElementById('scanOut').addEventListener('click',()=>{
+  if(stockA>=5){stockA-=5;bump(whA,stockA);logLine('QR scanned · <b>5 issued</b> from Warehouse A','−5')}
+  else if(stockB>=5){stockB-=5;bump(whB,stockB);logLine('QR scanned · <b>5 issued</b> from Warehouse B','−5')}
+  else logLine('<b>Stock low</b> — request vendor bids','');
+  if(stockA<=20&&stockA>15)logLine('Reorder point reached on <b>BP-4417</b>','');
+});
+const VENDORS=[['Apex Auto Parts','₹184 / unit'],['Shakti Traders','₹171 / unit'],['Bharat Spares','₹179 / unit']];
+document.getElementById('askBids').addEventListener('click',e=>{
+  e.target.disabled=true;e.target.textContent='Bids requested…';
+  logLine('Bid request sent to <b>3 vendors</b> · 200 units','');
+  VENDORS.forEach(([v,p],i)=>setTimeout(()=>{
+    const best=i===VENDORS.length-1;
+    logLine((best?'<b>'+v+' wins</b> — lowest bid':v+' bid'),p,best);
+    if(best){transit+=200;bump(whT,transit);
+      setTimeout(()=>{logLine('Order placed · <b>200 units in transit</b>','+200');
+        e.target.disabled=false;e.target.textContent='Request vendor bids'},800)}
+  },700+i*750));
+});
+
+/* ───── custom demo ───── */
+const BLUE={
+  clinic:[['Appointments','Bookings, reminders on WhatsApp, and no double-booked slots'],
+    ['Patient records','History, prescriptions and reports in one place'],
+    ['Follow-ups','Automatic recall for vaccinations and review visits'],
+    ['Billing','GST invoices and daily collection summary']],
+  dealer:[['Lead pipeline','Every enquiry from every source, with a named owner'],
+    ['Test drives','Scheduling, reminders and outcomes recorded'],
+    ['Vehicle stock','What is on the floor, what is promised, what is sold'],
+    ['Finance follow-up','Loan status tracked against each buyer']],
+  coach:[['Admissions','Enquiry to enrolment, with follow-up that actually happens'],
+    ['Batches &amp; attendance','Who is in which batch, and who stopped coming'],
+    ['Fee collection','Instalments, reminders and receipts'],
+    ['Parent updates','Progress sent to parents without anyone typing it out']],
+  retail:[['Counter billing','Fast billing with GST and daily cash reconciliation'],
+    ['Stock','What is selling, what is dead, what to reorder'],
+    ['Customer list','Who buys what, and when they last came in'],
+    ['Offers','Send a message to the people it applies to, not everyone']]
+};
+const blue=document.getElementById('blue');
+function drawBlue(k){
+  blue.innerHTML='';
+  BLUE[k].forEach(([t,d],i)=>{
+    const r=document.createElement('div');r.className='bl';
+    r.style.animationDelay=(i*70)+'ms';
+    r.innerHTML=`<span class="n">${String(i+1).padStart(2,'0')}</span>
+      <span class="x"><b>${t}</b>${d}</span>`;
+    blue.appendChild(r);
+  });
+}
+drawBlue('clinic');
+document.getElementById('picker').addEventListener('click',e=>{
+  if(!e.target.classList.contains('pk'))return;
+  document.querySelectorAll('.pk').forEach(p=>p.classList.remove('sel'));
+  e.target.classList.add('sel');drawBlue(e.target.dataset.k);
+});
+
+/* ───── scroll story ───── */
+const vz=[...document.querySelectorAll('.vzr')],bar=document.getElementById('vzbar');
+const bio=new IntersectionObserver(es=>es.forEach(e=>{
+  const i=+e.target.dataset.beat;
+  if(e.isIntersecting){
+    e.target.classList.add('on');
+    vz.forEach((r,j)=>r.classList.toggle('on',j<=i));
+    bar.style.width=((i+1)/3*100)+'%';
+  }else e.target.classList.remove('on');
+}),{threshold:.6});
+document.querySelectorAll('.beat').forEach(b=>bio.observe(b));
+</script>
+</body>
+</html>

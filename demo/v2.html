@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nevyera — Try it right here</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#04140D; --pine:#082018; --paper:#FBF8F3; --ink:#16241D;
+  --forest:#0F5132; --leaf:#3FD98A; --sage:#E6F0EA; --gold:#E9C46A;
+  --muted:#5C6B63; --dim:#8FA79B; --line:#E7E0D5; --hair:rgba(255,255,255,.1);
+  --display:'Fraunces',Georgia,serif; --body:'Inter',system-ui,sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,monospace;
+  --gut:clamp(20px,5vw,60px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.028em;line-height:1.08;margin:0}
+h1{font-size:clamp(33px,4.9vw,56px)}
+h2{font-size:clamp(27px,3.5vw,42px)}
+h3{font-size:18px;letter-spacing:-.02em}
+p{margin:0}
+em{font-style:italic}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+:focus-visible{outline:2.5px solid var(--leaf);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:var(--gut)}
+.sec{padding-block:clamp(62px,8.5vw,112px);position:relative}
+.dark{background:var(--void);color:#D6E6DD}
+.dark h2,.dark h3{color:var(--paper)}
+.lede{font-size:clamp(15px,1.65vw,17.5px);line-height:1.65;max-width:52ch;margin-top:15px;color:var(--muted)}
+.dark .lede{color:var(--dim)}
+.tm{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:10px;margin-bottom:15px}
+.tm::after{content:"";height:1px;flex:1;max-width:70px;background:var(--line)}
+.tm b{color:var(--forest);font-weight:600}
+.dark .tm{color:#6F877B}.dark .tm b{color:var(--gold)}.dark .tm::after{background:var(--hair)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;
+  font-size:14.5px;padding:12px 22px;border-radius:11px;border:1px solid transparent;cursor:pointer;
+  transition:transform .18s,box-shadow .18s,background .2s,border-color .2s}
+.btn-p{background:var(--leaf);color:var(--void);box-shadow:0 8px 26px -10px rgba(63,217,138,.7)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 14px 34px -12px rgba(63,217,138,.85)}
+.btn-l{background:var(--forest);color:var(--paper);box-shadow:0 8px 22px -10px rgba(15,81,50,.8)}
+.btn-l:hover{transform:translateY(-2px)}
+.btn-g{border-color:var(--hair);color:#D6E6DD;background:rgba(255,255,255,.05)}
+.btn-g:hover{border-color:rgba(255,255,255,.3)}
+
+/* ═════════ AURORA (cursor-reactive) ═════════ */
+.aur{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.aur i{position:absolute;border-radius:50%;filter:blur(90px);display:block;
+  transition:transform 1.4s cubic-bezier(.2,.7,.3,1)}
+.aur .a1{width:54vw;height:48vw;left:-10%;top:-20%;background:#0F7A47;opacity:.55;animation:f1 24s ease-in-out infinite}
+.aur .a2{width:46vw;height:42vw;right:-8%;top:-6%;background:#0C6E7A;opacity:.42;animation:f2 29s ease-in-out infinite}
+.aur .a3{width:40vw;height:36vw;left:36%;bottom:-22%;background:var(--gold);opacity:.16;animation:f3 34s ease-in-out infinite}
+@keyframes f1{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(8%,6%,0) scale(1.18)}}
+@keyframes f2{0%,100%{transform:translate3d(0,0,0) scale(1.1)}50%{transform:translate3d(-9%,5%,0) scale(.92)}}
+@keyframes f3{0%,100%{transform:translate3d(0,0,0) scale(.95)}50%{transform:translate3d(6%,-8%,0) scale(1.22)}}
+.grain{position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.55;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='.055'/></svg>")}
+
+/* ═════════ NAV ═════════ */
+.nav{position:sticky;top:0;z-index:60;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
+.nav.stuck{background:rgba(4,20,13,.8);backdrop-filter:blur(16px) saturate(1.4);border-bottom-color:var(--hair)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:70px}
+.mark{font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.035em;color:var(--paper);line-height:1}
+.mark span{color:var(--gold)}
+.nav ul{display:flex;gap:25px;list-style:none;margin:0 auto 0 12px;padding:0;font-size:14.5px;color:var(--dim)}
+.nav ul a:hover{color:var(--paper)}
+
+/* ═════════ HERO ═════════ */
+.hero{position:relative;background:var(--void);color:#D6E6DD;overflow:hidden;
+  padding-block:clamp(30px,4vw,54px) clamp(60px,8vw,96px)}
+.hero .wrap{position:relative;z-index:2}
+.hero-top{max-width:62ch;margin-bottom:clamp(30px,4vw,48px)}
+.hero h1{color:var(--paper);max-width:18ch}
+.hero h1 em{color:var(--leaf)}
+.tag{display:inline-flex;align-items:center;gap:8px;background:rgba(63,217,138,.12);color:var(--leaf);
+  border:1px solid rgba(63,217,138,.25);border-radius:999px;padding:6px 14px;font-size:12.5px;
+  font-weight:600;margin-bottom:18px}
+.tag i{width:6px;height:6px;border-radius:50%;background:var(--leaf);animation:blip 2s infinite}
+@keyframes blip{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(63,217,138,.6)}50%{opacity:.4;box-shadow:0 0 0 6px rgba(63,217,138,0)}}
+
+/* ── THE PLAYGROUND ── */
+.play{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(18px,2.6vw,34px);align-items:stretch}
+.panel{border-radius:20px;position:relative;display:flex;flex-direction:column}
+.plabel{font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  margin-bottom:10px;display:flex;align-items:center;gap:8px}
+
+/* customer phone */
+.phone{background:linear-gradient(180deg,#0C2A1E,#08201700);border:1px solid var(--hair);
+  padding:16px;backdrop-filter:blur(8px)}
+.phone .plabel{color:#6F877B}
+.ph-head{display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair);margin-bottom:12px}
+.av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:11.5px;
+  font-weight:700;flex:none;font-family:var(--body)}
+.av-c{background:#1E4437;color:#9FD9BC}
+.ph-nm{font-size:13.5px;font-weight:600;color:var(--paper)}
+.ph-sub{font-size:11.5px;color:#6F877B}
+.ph-thread{flex:1;display:flex;flex-direction:column;gap:8px;min-height:150px;
+  max-height:210px;overflow-y:auto;padding-right:4px;scrollbar-width:thin}
+.cb{max-width:88%;font-size:13px;line-height:1.5;padding:9px 13px;border-radius:14px;
+  align-self:flex-end;background:#12503A;color:#DFF5EA;border-bottom-right-radius:5px;
+  animation:pop .32s cubic-bezier(.2,.8,.3,1.2) both}
+.cb.in{align-self:flex-start;background:rgba(255,255,255,.07);color:#C6DBD1;border-bottom-left-radius:5px;border-bottom-right-radius:14px}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.94)}to{opacity:1;transform:none}}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 10px}
+.chip{font-size:11.5px;padding:6px 11px;border-radius:999px;border:1px solid var(--hair);
+  background:rgba(255,255,255,.04);color:#A9C4B8;cursor:pointer;transition:all .18s}
+.chip:hover{border-color:var(--leaf);color:var(--leaf);transform:translateY(-1px)}
+.composer{display:flex;gap:8px;align-items:center}
+.composer input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--hair);color:var(--paper);
+  border-radius:999px;padding:11px 16px;font-size:13.5px;font-family:var(--body)}
+.composer input::placeholder{color:#5E7468}
+.composer input:focus{outline:none;border-color:var(--leaf);background:rgba(63,217,138,.07)}
+.send{width:40px;height:40px;border-radius:50%;border:none;background:var(--leaf);color:var(--void);
+  cursor:pointer;display:grid;place-items:center;flex:none;transition:transform .18s}
+.send:hover{transform:scale(1.08)}
+.send svg{width:17px;height:17px;fill:currentColor}
+
+/* nevyera inbox */
+.crm{background:rgba(255,255,255,.045);border:1px solid var(--hair);padding:16px;backdrop-filter:blur(10px);
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
+.crm .plabel{color:var(--gold)}
+.crm-head{display:flex;align-items:center;gap:10px;padding-bottom:12px;border-bottom:1px solid var(--hair);margin-bottom:12px}
+.av-n{background:var(--leaf);color:var(--void)}
+.online{font-size:11.5px;color:var(--leaf);display:flex;align-items:center;gap:5px}
+.online i{width:5px;height:5px;border-radius:50%;background:var(--leaf)}
+.stat{margin-left:auto;text-align:right}
+.stat .l{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:#6F877B;text-transform:uppercase}
+.stat .v{font-family:var(--display);font-size:21px;font-weight:600;color:var(--paper);
+  font-variant-numeric:tabular-nums;line-height:1.1}
+.leads{display:flex;flex-direction:column;gap:9px;min-height:214px;max-height:262px;
+  overflow-y:auto;padding-right:4px;scrollbar-width:thin}
+.lead{background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:13px;padding:12px 13px;
+  animation:slide .4s cubic-bezier(.2,.8,.3,1.1) both;position:relative;overflow:hidden}
+@keyframes slide{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.lead.fresh::before{content:"";position:absolute;inset:0;background:rgba(63,217,138,.16);animation:flash 1.1s ease-out forwards}
+@keyframes flash{to{opacity:0}}
+.lead-top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.lead-nm{font-size:13px;font-weight:600;color:var(--paper)}
+.lead-tm{font-family:var(--mono);font-size:10px;color:#6F877B}
+.pill{margin-left:auto;font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:3px 9px;
+  border-radius:999px;transition:background .4s,color .4s;white-space:nowrap}
+.p-new{background:rgba(233,196,106,.16);color:var(--gold)}
+.p-asg{background:rgba(63,217,138,.15);color:var(--leaf)}
+.p-cls{background:rgba(255,255,255,.09);color:#8FA79B}
+.lead-msg{font-size:12.5px;color:#B4CCC1;line-height:1.5}
+.lead-foot{display:flex;align-items:center;gap:7px;margin-top:9px;font-size:11.5px;color:#7E968A;
+  opacity:0;max-height:0;transition:opacity .4s,max-height .4s}
+.lead-foot.show{opacity:1;max-height:40px}
+.mini{width:19px;height:19px;border-radius:50%;background:#1E4437;color:#9FD9BC;font-size:9px;
+  font-weight:700;display:grid;place-items:center}
+.empty{text-align:center;color:#5E7468;font-size:13px;padding:52px 16px;line-height:1.6}
+.empty b{display:block;color:#8FA79B;font-size:14px;margin-bottom:5px}
+.hint{margin-top:14px;font-size:12.5px;color:#6F877B;text-align:center}
+.hint b{color:var(--leaf)}
+
+/* ═════════ SCROLL STORY ═════════ */
+.story{background:var(--void);color:#D6E6DD;position:relative}
+.story .grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,70px);align-items:start}
+.sticky{position:sticky;top:120px}
+.viz{background:rgba(255,255,255,.045);border:1px solid var(--hair);border-radius:20px;padding:20px;
+  backdrop-filter:blur(10px);box-shadow:0 40px 90px -40px rgba(0,0,0,.8)}
+.viz-row{display:flex;align-items:center;gap:11px;padding:13px;border-radius:13px;margin-bottom:9px;
+  border:1px solid transparent;transition:all .5s cubic-bezier(.2,.7,.3,1);opacity:.3}
+.viz-row.on{opacity:1;background:rgba(63,217,138,.08);border-color:rgba(63,217,138,.3);transform:translateX(5px)}
+.viz-row .txt{font-size:13px;color:#B4CCC1}
+.viz-row .txt b{display:block;color:var(--paper);font-size:13.5px;margin-bottom:2px}
+.viz-row .ck{margin-left:auto;font-size:15px;color:var(--leaf);opacity:0;transition:opacity .5s}
+.viz-row.on .ck{opacity:1}
+.viz-clock{font-family:var(--mono);font-size:11px;color:var(--gold);letter-spacing:.07em;
+  padding-top:14px;border-top:1px solid var(--hair);margin-top:6px;display:flex;justify-content:space-between}
+.beat{padding-block:clamp(52px,9vh,100px);opacity:.32;transition:opacity .5s}
+.beat.on{opacity:1}
+.beat .clock{font-family:var(--mono);font-size:12.5px;color:var(--gold);letter-spacing:.07em;margin-bottom:11px}
+.beat h3{font-size:clamp(21px,2.6vw,29px);margin-bottom:11px}
+.beat p{font-size:14.5px;color:var(--dim);line-height:1.7;max-width:44ch}
+.payoff{border-top:1px solid var(--hair);padding-top:34px;display:flex;align-items:baseline;
+  gap:16px;flex-wrap:wrap}
+.payoff .n{font-family:var(--display);font-size:clamp(40px,5.5vw,62px);color:var(--gold);
+  font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
+.payoff .l{font-size:14.5px;color:var(--dim);max-width:36ch}
+
+/* ═════════ PRODUCTS (parallax depth) ═════════ */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 24px 24px;
+  display:flex;flex-direction:column;position:relative;transform-style:preserve-3d;
+  transition:box-shadow .35s,border-color .35s;will-change:transform}
+.card:hover{box-shadow:0 34px 64px -28px rgba(8,32,24,.42);border-color:#D2E1D8}
+.card>*{transform:translateZ(0);transition:transform .25s}
+.card .ic{width:40px;height:40px;border-radius:12px;background:var(--sage);display:grid;
+  place-items:center;margin-bottom:17px}
+.card .ic svg{width:20px;height:20px;stroke:var(--forest);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.card p{font-size:14px;color:var(--muted);margin-top:9px;line-height:1.6}
+.card ul{list-style:none;padding:0;margin:16px 0 0;font-size:13.5px;color:var(--muted)}
+.card li{padding-left:18px;position:relative;margin-bottom:6px}
+.card li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:var(--sage)}
+.card .go{margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:var(--forest)}
+.card .go::after{content:" →";transition:margin .2s}
+.card:hover .go::after{margin-left:5px}
+.live{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  background:var(--sage);color:var(--forest);padding:3px 8px;border-radius:999px;margin-left:7px;vertical-align:2px}
+
+/* ═════════ PROOF / PRICING / CTA ═════════ */
+.proof{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:42px}
+.pf{background:#fff;border:1px solid var(--line);border-radius:15px;padding:22px 24px}
+.pf h3{font-size:16.5px;margin-bottom:7px}
+.pf p{font-size:13.5px;color:var(--muted);line-height:1.6}
+.note{margin-top:26px;font-size:13px;color:var(--muted);border-left:2px solid var(--gold);padding-left:14px;max-width:62ch}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:42px;align-items:start}
+.tier{background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px 24px}
+.tier.mid{border-color:var(--forest);box-shadow:0 26px 54px -30px rgba(15,81,50,.55);position:relative}
+.tier.mid::before{content:"Most chosen";position:absolute;top:-11px;left:24px;background:var(--forest);
+  color:var(--paper);font-size:11px;font-weight:600;padding:4px 11px;border-radius:999px}
+.tier .nm{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tier .pr{font-family:var(--display);font-size:37px;font-weight:600;margin:9px 0 2px;
+  font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.tier .per{font-size:13px;color:var(--muted);margin-bottom:17px}
+.tier ul{list-style:none;padding:0;margin:0 0 21px;font-size:13.5px;color:var(--muted)}
+.tier li{padding-left:19px;position:relative;margin-bottom:7px}
+.tier li::before{content:"✓";position:absolute;left:0;color:var(--forest);font-weight:700;font-size:12px}
+.tier .btn{width:100%}
+.cfg{margin-top:20px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.ctabox{background:rgba(255,255,255,.05);border:1px solid var(--hair);border-radius:22px;
+  padding:clamp(28px,4vw,46px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(26px,4vw,50px);
+  backdrop-filter:blur(10px);position:relative;z-index:2}
+.field{margin-bottom:13px}
+.field label{display:block;font-size:12.5px;font-weight:600;margin-bottom:6px;color:#C6DBD1}
+.field input,.field select{width:100%;padding:12px 14px;border:1px solid var(--hair);border-radius:11px;
+  font-family:var(--body);font-size:14.5px;background:rgba(255,255,255,.06);color:var(--paper)}
+.field input::placeholder{color:#5E7468}
+.field input:focus,.field select:focus{border-color:var(--leaf);outline:none}
+.field select option{background:var(--pine)}
+.fine{font-size:12.5px;color:#6F877B;margin-top:11px}
+.why{list-style:none;padding:0;margin:19px 0 0;font-size:14px;color:var(--dim)}
+.why li{padding-left:24px;position:relative;margin-bottom:10px}
+.why li::before{content:"✓";position:absolute;left:0;color:var(--leaf);font-weight:700}
+footer{background:var(--void);color:#7E968A;padding-block:50px 28px;font-size:13.5px;border-top:1px solid var(--hair)}
+footer .cols{display:grid;grid-template-columns:1.6fr repeat(3,1fr);gap:32px}
+footer .mark{font-size:24px}
+footer h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#5E7468;margin:0 0 13px;font-weight:600;font-family:var(--body)}
+footer ul{list-style:none;padding:0;margin:0}
+footer li{margin-bottom:9px}
+footer a:hover{color:var(--paper)}
+footer .base{margin-top:40px;padding-top:21px;border-top:1px solid var(--hair);display:flex;
+  justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12.5px;color:#5E7468}
+
+.rv{opacity:0;transform:translateY(20px);transition:opacity .75s cubic-bezier(.2,.7,.3,1),transform .75s cubic-bezier(.2,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+
+@media(max-width:1000px){
+  .play,.story .grid,.ctabox{grid-template-columns:1fr}
+  .sticky{position:static}
+  .cards,.tiers,.proof{grid-template-columns:1fr}
+  .nav ul{display:none}
+  .beat{opacity:1;padding-block:34px}
+  footer .cols{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){footer .cols{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}.beat{opacity:1}
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ══ HERO / PLAYGROUND ══ -->
+<div class="hero" id="top">
+  <div class="aur" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
+
+  <nav class="nav" id="nav">
+    <div class="wrap">
+      <a href="#top" class="mark">Nevyera<span>.</span></a>
+      <ul>
+        <li><a href="#products">Products</a></li><li><a href="#custom">Custom</a></li>
+        <li><a href="#pricing">Pricing</a></li><li><a href="#about">About</a></li>
+      </ul>
+      <a href="#demo" class="btn btn-p">Book a free demo</a>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="tag"><i></i> This demo is live — you drive it</span>
+      <h1>Send yourself a message. Watch it <em>become a customer.</em></h1>
+      <p class="lede">On the left you're the customer, messaging a car dealership on WhatsApp. On the
+        right is what the dealership sees in Nevyera. Type anything and send it.</p>
+    </div>
+
+    <div class="play">
+      <!-- customer -->
+      <div class="panel phone">
+        <div class="plabel">◂ You, the customer</div>
+        <div class="ph-head">
+          <div class="av av-c">SM</div>
+          <div><div class="ph-nm">Sharma Motors</div><div class="ph-sub">WhatsApp Business</div></div>
+        </div>
+        <div class="ph-thread" id="thread"></div>
+        <div class="chips" id="chips">
+          <button class="chip">Is the Creta 2022 still available?</button>
+          <button class="chip">What's the down payment on the i20?</button>
+          <button class="chip">Can I come see the car tomorrow?</button>
+        </div>
+        <form class="composer" id="composer">
+          <input id="msg" placeholder="Type a message…" autocomplete="off" aria-label="Message to the dealership">
+          <button class="send" type="submit" aria-label="Send message">
+            <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- nevyera -->
+      <div class="panel crm">
+        <div class="plabel">What Sharma Motors sees in Nevyera ▸</div>
+        <div class="crm-head">
+          <div class="av av-n">N</div>
+          <div><div class="ph-nm">Shared inbox</div><div class="online"><i></i> 3 agents online</div></div>
+          <div class="stat"><div class="l">Leads today</div><div class="v" id="count">126</div></div>
+        </div>
+        <div class="leads" id="leads">
+          <div class="empty" id="empty"><b>No leads yet</b>Send a message on the left and watch it arrive.</div>
+        </div>
+        <p class="hint">Every message becomes a lead, gets <b>assigned</b>, and closes — automatically.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCROLL STORY ══ -->
+<section class="sec story" id="how">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:14px">
+      <div class="tm"><b>A Saturday</b> · Sharma Motors</div>
+      <h2>Rohit asked at 9:14. He was booked by 9:22.</h2>
+      <p class="lede">Nothing clever happened. The enquiry just had somewhere to land, someone's name
+        on it, and a reply that didn't wait for a gap between customers. Scroll.</p>
+    </div>
+    <div class="grid">
+      <div>
+        <div class="beat" data-beat="0">
+          <div class="clock">9:14 AM</div>
+          <h3>It lands somewhere real</h3>
+          <p>The message arrives on the business WhatsApp number and becomes a lead automatically —
+            name, number, and what they asked about. Nobody had to write it down.</p>
+        </div>
+        <div class="beat" data-beat="1">
+          <div class="clock">9:15 AM</div>
+          <h3>Someone owns it</h3>
+          <p>It's assigned to Priya. Her name is on it and the whole team can see that, so it stops
+            being everybody's problem and therefore nobody's.</p>
+        </div>
+        <div class="beat" data-beat="2">
+          <div class="clock">9:22 AM</div>
+          <h3>It closes</h3>
+          <p>She replies from the shared inbox, books the test drive, and the lead moves to closed.
+            The whole conversation is still there next month.</p>
+        </div>
+        <div class="payoff rv">
+          <div class="n">8 minutes</div>
+          <div class="l">From "is this available?" to a booked test drive — instead of four hours, or never.</div>
+        </div>
+      </div>
+      <div class="sticky">
+        <div class="viz">
+          <div class="viz-row" data-viz="0">
+            <div class="av av-c">RK</div>
+            <div class="txt"><b>Rohit Kumar</b>Captured as a lead</div><div class="ck">✓</div>
+          </div>
+          <div class="viz-row" data-viz="1">
+            <div class="av av-n">P</div>
+            <div class="txt"><b>Assigned to Priya</b>Owner set, team notified</div><div class="ck">✓</div>
+          </div>
+          <div class="viz-row" data-viz="2">
+            <div class="av av-c">🚗</div>
+            <div class="txt"><b>Test drive booked</b>Lead closed, history kept</div><div class="ck">✓</div>
+          </div>
+          <div class="viz-clock"><span id="vizStart">9:14 AM</span><span id="vizNow">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRODUCTS ══ -->
+<section class="sec" id="products">
+  <div class="wrap">
+    <div class="rv">
+      <div class="tm"><b>What we build</b></div>
+      <h2>Two products, and a team that builds what's missing.</h2>
+      <p class="lede">Both are live and running today. When what you need doesn't exist yet, we build
+        it — same team, same phone number.</p>
+    </div>
+    <div class="cards">
+      <article class="card tilt rv">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-4-.9L3 21l1.9-5a8.4 8.4 0 0 1 3.6-11.4 8.9 8.9 0 0 1 12.5 7z"/></svg></div>
+        <h3>WhatsApp Lead Manager <span class="live">LIVE</span></h3>
+        <p>Every enquiry from your WhatsApp number, in one inbox your whole team can see.</p>
+        <ul><li>Shared inbox, live across the team</li><li>Assign leads by name</li>
+          <li>Admin, manager and agent roles</li><li>Saved reply templates</li>
+          <li>Official WhatsApp Business API</li></ul>
+        <div class="go">See the product</div>
+      </article>
+      <article class="card tilt rv">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg></div>
+        <h3>Inventory <span class="live">LIVE</span></h3>
+        <p>Stock, warehouses, vendors and billing — with bidding built in, not bolted on.</p>
+        <ul><li>QR-tracked stock across warehouses</li><li>Vendors bid on what you need</li>
+          <li>Vendor and purchase management</li><li>GST-ready</li><li>Billing through Zoho</li></ul>
+        <div class="go">See the product</div>
+      </article>
+      <article class="card tilt rv" id="custom">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+        <h3>Custom software</h3>
+        <p>When the tool for your business doesn't exist, we build it around how you already work.</p>
+        <ul><li>We map your process first</li><li>Built for the people who'll use it</li>
+          <li>You own the code</li><li>Support from the team that built it</li></ul>
+        <div class="go">Talk to us</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PROOF ══ -->
+<section class="sec" id="about" style="background:#fff;border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="rv">
+      <div class="tm"><b>Why Nevyera</b></div>
+      <h2>We're new. Here's what you can check.</h2>
+      <p class="lede">We'd rather tell you what's verifiable than show you logos you can't call.</p>
+    </div>
+    <div class="proof">
+      <div class="pf rv" style="background:var(--paper)"><h3>Official WhatsApp Business API</h3>
+        <p>Built on Meta's Cloud API, not an unofficial workaround that gets your number banned.</p></div>
+      <div class="pf rv" style="background:var(--paper)"><h3>A team in India you can phone</h3>
+        <p>Support is a person in your timezone who knows the product, not a ticket queue.</p></div>
+      <div class="pf rv" style="background:var(--paper)"><h3>Your data belongs to you</h3>
+        <p>Export your leads and conversations whenever you want. Leaving is always possible.</p></div>
+      <div class="pf rv" style="background:var(--paper)"><h3>Set up in an afternoon</h3>
+        <p>Connect your number, add your team, start. No three-month rollout.</p></div>
+    </div>
+    <p class="note rv"><b>No testimonials on this page.</b> We don't have customers yet, and inventing
+      quotes from businesses that don't exist would be a strange way to ask you to trust us with yours.</p>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section class="sec" id="pricing">
+  <div class="wrap">
+    <div class="rv">
+      <div class="tm"><b>Pricing</b></div>
+      <h2>Priced for a shop, not an enterprise.</h2>
+      <p class="lede">Every plan includes the full product. The tiers are about how many people and how
+        many leads — not about locking features away.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier rv"><div class="nm">Trial</div><div class="pr">₹0</div><div class="per">for 14 days</div>
+        <ul><li>2 team members</li><li>100 leads</li><li>Full product</li><li>No card needed</li></ul>
+        <a href="#demo" class="btn btn-l" style="background:transparent;color:var(--forest);border-color:var(--line)">Start free</a></div>
+      <div class="tier mid rv"><div class="nm">Basic</div><div class="pr">₹1,499</div><div class="per">per month</div>
+        <ul><li>5 team members</li><li>2,000 leads</li><li>Saved templates</li><li>Email support</li></ul>
+        <a href="#demo" class="btn btn-l">Book a demo</a></div>
+      <div class="tier rv"><div class="nm">Advance</div><div class="pr">₹3,999</div><div class="per">per month</div>
+        <ul><li>20 team members</li><li>Unlimited leads</li><li>Priority support</li><li>Onboarding call</li></ul>
+        <a href="#demo" class="btn btn-l" style="background:transparent;color:var(--forest);border-color:var(--line)">Book a demo</a></div>
+    </div>
+    <p class="cfg rv">// placeholder figures — they live in content/pricing.ts with a showPrices flag</p>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="sec dark" id="demo" style="overflow:hidden">
+  <div class="aur" aria-hidden="true"><i class="a1" style="opacity:.35"></i><i class="a3"></i></div>
+  <div class="wrap">
+    <div class="ctabox rv">
+      <div>
+        <div class="tm"><b>11:40 AM</b> · the test drive</div>
+        <h2>See it on your own WhatsApp.</h2>
+        <p class="lede">A 20-minute call. We'll connect your number to a trial and walk through your
+          actual enquiries — not a canned demo account.</p>
+        <ul class="why"><li>No slide deck</li><li>You keep the trial afterwards</li>
+          <li>We'll tell you if it's not a fit</li></ul>
+      </div>
+      <form onsubmit="event.preventDefault();this.querySelector('button').textContent='Not wired up in this preview'">
+        <div class="field"><label for="n">Your name</label><input id="n" placeholder="Ujjwal Aggarwal"></div>
+        <div class="field"><label for="b">Business name</label><input id="b" placeholder="Sharma Motors"></div>
+        <div class="field"><label for="w">WhatsApp number</label><input id="w" placeholder="+91 98765 43210"></div>
+        <div class="field"><label for="t">What do you run?</label><select id="t">
+          <option>Car dealership</option><option>Clinic or hospital</option><option>Coaching centre</option>
+          <option>Retail shop</option><option>Something else</option></select></div>
+        <button type="submit" class="btn btn-p" style="width:100%">Book a free demo</button>
+        <p class="fine">We'll reply on WhatsApp within one working day.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div><div class="mark">Nevyera<span>.</span></div>
+        <p style="margin-top:12px;max-width:30ch">The software small businesses actually run on.</p></div>
+      <div><h4>Products</h4><ul><li><a href="#products">WhatsApp Lead Manager</a></li>
+        <li><a href="#products">Inventory</a></li><li><a href="#custom">Custom software</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="#about">About</a></li><li><a href="#pricing">Pricing</a></li>
+        <li><a href="#demo">Book a demo</a></li></ul></div>
+      <div><h4>Legal</h4><ul><li><a href="#">Privacy policy</a></li><li><a href="#">Terms of service</a></li></ul></div>
+    </div>
+    <div class="base"><span>© 2026 Nevyera</span><span>Made in India</span></div>
+  </div>
+</footer>
+
+<script>
+const calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* ── nav ── */
+const nav=document.getElementById('nav');
+addEventListener('scroll',()=>nav.classList.toggle('stuck',scrollY>14),{passive:true});
+
+/* ── cursor-reactive aurora ── */
+if(!calm){
+  addEventListener('pointermove',e=>{
+    const x=(e.clientX/innerWidth-.5), y=(e.clientY/innerHeight-.5);
+    document.querySelectorAll('.aur i').forEach((b,i)=>{
+      const d=(i+1)*14;
+      b.style.transform=`translate3d(${x*d}px,${y*d}px,0)`;
+    });
+  },{passive:true});
+}
+
+/* ── THE PLAYGROUND ── */
+const thread=document.getElementById('thread'), leadsEl=document.getElementById('leads'),
+      emptyEl=document.getElementById('empty'), countEl=document.getElementById('count'),
+      form=document.getElementById('composer'), input=document.getElementById('msg');
+let count=126, sent=0;
+const NAMES=['Rohit Kumar','Anjali Sharma','Mahesh Verma','Deepa Nair','Imran Qureshi'];
+const AGENTS=['Priya','Arjun','Sana'];
+const REPLIES=[
+  "Yes, it's available. Would you like to book a test drive?",
+  "Sure — I can share the full details on WhatsApp now.",
+  "Absolutely, what time suits you tomorrow?",
+  "Let me check and get right back to you."
+];
+const now=()=>new Date().toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',hour12:true});
+const initials=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+function bubble(text,incoming){
+  const b=document.createElement('div');
+  b.className='cb'+(incoming?' in':'');
+  b.textContent=text;
+  thread.appendChild(b); thread.scrollTop=thread.scrollHeight;
+}
+
+function send(text){
+  if(!text.trim())return;
+  const name=NAMES[sent%NAMES.length], agent=AGENTS[sent%AGENTS.length];
+  sent++;
+  bubble(text,false);
+  if(emptyEl)emptyEl.remove();
+
+  const card=document.createElement('div');
+  card.className='lead fresh';
+  card.innerHTML=`<div class="lead-top">
+      <div class="av av-c">${initials(name)}</div>
+      <div><div class="lead-nm">${name}</div><div class="lead-tm">${now()}</div></div>
+      <div class="pill p-new">NEW</div>
+    </div>
+    <div class="lead-msg"></div>
+    <div class="lead-foot"><div class="mini">${agent[0]}</div><span class="fmsg"></span></div>`;
+  card.querySelector('.lead-msg').textContent=text;
+  leadsEl.prepend(card);
+
+  count++; countEl.textContent=count;
+  const pill=card.querySelector('.pill'), foot=card.querySelector('.lead-foot'),
+        fmsg=card.querySelector('.fmsg');
+
+  setTimeout(()=>{ pill.className='pill p-asg'; pill.textContent='ASSIGNED';
+    fmsg.textContent=`Assigned to ${agent}`; foot.classList.add('show'); }, 900);
+
+  setTimeout(()=>bubble(REPLIES[(sent-1)%REPLIES.length],true), 1900);
+
+  setTimeout(()=>{ pill.className='pill p-cls'; pill.textContent='REPLIED';
+    fmsg.textContent=`${agent} replied · ${now()}`; }, 2400);
+}
+
+form.addEventListener('submit',e=>{e.preventDefault();send(input.value);input.value=''});
+document.getElementById('chips').addEventListener('click',e=>{
+  if(e.target.classList.contains('chip'))send(e.target.textContent);
+});
+
+/* seed one lead so the panel is never dead on arrival */
+setTimeout(()=>{ if(!sent)send('Is the Creta 2022 still available?') },1400);
+
+/* ── scroll story ── */
+const beats=[...document.querySelectorAll('.beat')], vizRows=[...document.querySelectorAll('.viz-row')],
+      vizNow=document.getElementById('vizNow'), TIMES=['9:14 AM','9:15 AM','9:22 AM'];
+const beatIO=new IntersectionObserver(es=>es.forEach(e=>{
+  const i=+e.target.dataset.beat;
+  if(e.isIntersecting){
+    e.target.classList.add('on');
+    vizRows.forEach((r,j)=>r.classList.toggle('on',j<=i));
+    vizNow.textContent=TIMES[i];
+  } else e.target.classList.remove('on');
+}),{threshold:.55});
+beats.forEach(b=>beatIO.observe(b));
+
+/* ── reveals ── */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}
+}),{threshold:.12,rootMargin:'0px 0px -40px'});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%4*70)+'ms';io.observe(el)});
+
+/* ── 3D parallax cards ── */
+if(matchMedia('(hover:hover) and (pointer:fine)').matches && !calm){
+  document.querySelectorAll('.tilt').forEach(c=>{
+    const kids=[...c.children];
+    c.addEventListener('pointermove',e=>{
+      const r=c.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      c.style.transform=`perspective(1000px) rotateY(${x*7}deg) rotateX(${-y*7}deg) translateY(-4px)`;
+      kids.forEach((k,i)=>{k.style.transform=`translateZ(${i<3?18-i*4:6}px)`});
+    });
+    c.addEventListener('pointerleave',()=>{
+      c.style.transform=''; kids.forEach(k=>k.style.transform='');
+    });
+  });
+}
+</script>
+</body>
+</html>
