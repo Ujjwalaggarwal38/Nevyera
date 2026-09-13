@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { PageShell } from "@/components/layout/PageShell";
+import { ProductPage } from "@/components/product/ProductPage";
+import { customSoftware } from "@/content/products";
 
-export const metadata: Metadata = { title: "Custom software" };
+export const metadata: Metadata = {
+  title: customSoftware.metaTitle,
+  description: customSoftware.metaDescription,
+};
 
 export default function Page() {
-  return <PageShell eyebrow="Solution 03" title="We map what you do, then build to that." />;
+  return <ProductPage product={customSoftware} />;
 }

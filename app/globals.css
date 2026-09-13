@@ -328,7 +328,7 @@
     margin-right: auto;
   }
 
-  .site-nav ul {
+  .site-nav .wrap > ul {
     display: flex;
     gap: 32px;
     list-style: none;
@@ -338,12 +338,12 @@
     color: var(--color-taupe);
   }
 
-  .site-nav ul a {
+  .site-nav .wrap > ul a {
     position: relative;
     transition: color var(--dur-fast) var(--ease-brand);
   }
 
-  .site-nav ul a::after {
+  .site-nav .wrap > ul a::after {
     content: "";
     position: absolute;
     left: 0;
@@ -354,11 +354,11 @@
     transition: width var(--dur-mid) var(--ease-brand);
   }
 
-  .site-nav ul a:hover {
+  .site-nav .wrap > ul a:hover {
     color: var(--color-ivory);
   }
 
-  .site-nav ul a:hover::after {
+  .site-nav .wrap > ul a:hover::after {
     width: 100%;
   }
 
@@ -427,9 +427,90 @@
     color: var(--color-faint);
   }
 
+  /*── mobile menu ──*/
+  .nav-toggle {
+    display: none;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-hair-d);
+    background: transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    flex: none;
+  }
+
+  .nav-toggle span {
+    position: absolute;
+    left: 11px;
+    width: 16px;
+    height: 1px;
+    background: var(--color-ivory);
+    transition:
+      transform var(--dur-fast) var(--ease-brand),
+      opacity var(--dur-fast) var(--ease-brand);
+  }
+
+  .nav-toggle span:first-child {
+    top: 16px;
+  }
+  .nav-toggle span:last-child {
+    top: 22px;
+  }
+
+  .nav-toggle.open span:first-child {
+    transform: translateY(3px) rotate(45deg);
+  }
+  .nav-toggle.open span:last-child {
+    transform: translateY(-3px) rotate(-45deg);
+  }
+
+  .nav-drawer {
+    display: none;
+    background: var(--color-obsidian);
+    border-top: 1px solid var(--color-hair-d);
+    padding: 8px var(--spacing-gut) 32px;
+  }
+
+  .nav-drawer ul {
+    list-style: none;
+    margin: 0 0 22px;
+    padding: 0;
+  }
+
+  .nav-drawer li {
+    border-bottom: 1px solid var(--color-hair-d);
+  }
+
+  .nav-drawer a:not(.btn) {
+    display: block;
+    padding: 18px 0;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    color: var(--color-ivory);
+  }
+
+  .nav-drawer .btn {
+    width: 100%;
+  }
+
   @media (max-width: 1000px) {
-    .site-nav ul {
+    .site-nav .wrap > ul {
       display: none;
+    }
+
+    .nav-toggle {
+      display: block;
+    }
+
+    .nav-cta {
+      display: none;
+    }
+
+    .nav-drawer.open {
+      display: block;
     }
     .footer-cols {
       grid-template-columns: 1fr 1fr;

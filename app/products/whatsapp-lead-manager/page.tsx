@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { PageShell } from "@/components/layout/PageShell";
+import { ProductPage } from "@/components/product/ProductPage";
+import { whatsappLeadManager } from "@/content/products";
 
-export const metadata: Metadata = { title: "WhatsApp Lead Manager" };
+export const metadata: Metadata = {
+  title: whatsappLeadManager.metaTitle,
+  description: whatsappLeadManager.metaDescription,
+};
 
 export default function Page() {
-  return <PageShell eyebrow="Solution 01" title="Every enquiry gets a name on it." />;
+  return <ProductPage product={whatsappLeadManager} />;
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useSolution } from "@/components/sections/SolutionContext";
 import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
@@ -62,6 +64,10 @@ export function Solutions() {
                     <span key={f}>{f}</span>
                   ))}
                 </div>
+
+                <Link href={product.href} className="btn btn-ghost pane-link">
+                  Everything about {product.name}
+                </Link>
               </div>
 
               <div>

@@ -1007,40 +1007,51 @@
     background: var(--color-cream);
   }
 
-  .proof-list {
-    margin-top: 44px;
-    border-top: 1px solid var(--color-hair-l);
-  }
-
-  .proof-row {
+  .proof-grid {
     display: grid;
-    grid-template-columns: auto minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: clamp(20px, 4vw, 58px);
-    padding: clamp(24px, 3vw, 38px) 0;
-    border-bottom: 1px solid var(--color-hair-l);
-    align-items: baseline;
-    transition: background var(--dur-mid) var(--ease-brand);
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2vw, 24px);
+    margin-top: 44px;
   }
 
-  .proof-row:hover {
-    background: rgb(201 162 39 / 0.05);
+  .proof-card {
+    background: var(--color-ivory);
+    border: 1px solid var(--color-hair-l);
+    border-radius: 3px;
+    padding: clamp(26px, 3vw, 40px);
+    display: flex;
+    flex-direction: column;
+    transition: border-color var(--dur-mid) var(--ease-brand);
+  }
+
+  .proof-card:hover {
+    border-color: var(--color-gold);
   }
 
   .proof-n {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    letter-spacing: 0.2em;
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(38px, 4vw, 54px);
+    line-height: 1;
+    letter-spacing: -0.04em;
     color: var(--color-gold-deep);
+    margin-bottom: 18px;
   }
 
-  .proof-row p {
-    font-size: 14px;
+  .proof-card h3 {
+    font-size: clamp(19px, 2vw, 25px);
+    margin-bottom: 12px;
+    max-width: 20ch;
+  }
+
+  .proof-card p {
+    font-size: 14.5px;
     color: var(--color-slate);
-    line-height: 1.75;
+    line-height: 1.72;
   }
 
   .proof-note {
-    margin-top: 42px;
+    margin-top: clamp(30px, 4vw, 44px);
     padding-left: 28px;
     border-left: 1px solid var(--color-gold);
     font-size: 14px;
@@ -1316,9 +1327,8 @@
       columns: 1;
     }
 
-    .proof-row {
+    .proof-grid {
       grid-template-columns: 1fr;
-      gap: 8px;
     }
 
     .tier {
@@ -1338,5 +1348,224 @@
     .tab {
       margin-right: 24px;
     }
+  }
+}
+
+@layer components {
+  /*═══ PRODUCT PAGE ═══*/
+  .product-hero {
+    padding-block: clamp(120px, 14vw, 170px) clamp(60px, 8vw, 96px);
+  }
+
+  .product-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: clamp(30px, 5vw, 70px);
+    align-items: center;
+  }
+
+  .product-eyebrow {
+    margin: 18px 0 20px;
+  }
+
+  .product-title {
+    font-size: clamp(40px, 6vw, 78px);
+    letter-spacing: -0.04em;
+    max-width: 12ch;
+  }
+
+  .product-promise {
+    margin-top: 26px;
+    max-width: 42ch;
+    font-size: clamp(15.5px, 1.6vw, 17.5px);
+    line-height: 1.75;
+    color: var(--color-taupe);
+  }
+
+  .product-demo-label {
+    margin-bottom: 14px;
+  }
+
+  /*── problem ──*/
+  .section-problem {
+    padding-block: clamp(70px, 9vw, 120px);
+    background: var(--color-cream);
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 76px);
+    align-items: start;
+  }
+
+  .problem-heading {
+    font-size: clamp(28px, 4vw, 50px);
+    margin-top: 16px;
+    max-width: 18ch;
+  }
+
+  .problem-body {
+    font-size: clamp(16px, 1.7vw, 19px);
+    line-height: 1.75;
+    color: var(--color-slate);
+    max-width: 50ch;
+  }
+
+  /*── features ──*/
+  .section-features {
+    padding-block: clamp(72px, 9vw, 124px);
+  }
+
+  .features-head h2 {
+    font-size: clamp(28px, 4vw, 52px);
+    margin-top: 16px;
+    max-width: 20ch;
+  }
+
+  .feature-blocks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2vw, 26px);
+    margin-top: 46px;
+  }
+
+  .feature-block {
+    border: 1px solid var(--color-hair-l);
+    border-radius: 3px;
+    padding: clamp(24px, 3vw, 38px);
+    transition: border-color var(--dur-mid) var(--ease-brand);
+  }
+
+  .feature-block:hover {
+    border-color: var(--color-gold);
+  }
+
+  .feature-n {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    color: var(--color-gold-deep);
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .feature-block h3 {
+    margin-bottom: 10px;
+    max-width: 22ch;
+  }
+
+  .feature-block p {
+    font-size: 14.5px;
+    line-height: 1.72;
+    color: var(--color-slate);
+  }
+
+  /*── faq ──*/
+  .section-faq {
+    padding-block: clamp(72px, 9vw, 124px);
+    background: var(--color-cream);
+  }
+
+  .faq-list {
+    margin-top: 44px;
+    border-top: 1px solid var(--color-hair-l);
+  }
+
+  .faq-row {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(20px, 4vw, 60px);
+    padding: clamp(22px, 2.8vw, 34px) 0;
+    border-bottom: 1px solid var(--color-hair-l);
+    align-items: baseline;
+  }
+
+  .faq-row h3 {
+    max-width: 24ch;
+  }
+
+  .faq-row p {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--color-slate);
+  }
+
+  /*── other solutions ──*/
+  .section-others {
+    padding-block: clamp(72px, 9vw, 118px);
+  }
+
+  .other-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(16px, 2vw, 26px);
+    margin-top: 44px;
+  }
+
+  .other-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid var(--color-hair-l);
+    border-radius: 3px;
+    padding: clamp(26px, 3vw, 40px);
+    transition:
+      border-color var(--dur-mid) var(--ease-brand),
+      background var(--dur-mid) var(--ease-brand);
+  }
+
+  .other-card:hover {
+    border-color: var(--color-gold);
+    background: var(--color-cream);
+  }
+
+  .other-n {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-gold-deep);
+    margin-bottom: 16px;
+  }
+
+  .other-card h3 {
+    font-size: clamp(21px, 2.2vw, 28px);
+    margin-bottom: 10px;
+  }
+
+  .other-card p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--color-slate);
+    max-width: 34ch;
+  }
+
+  .other-go {
+    margin-top: auto;
+    padding-top: 26px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-obsidian);
+  }
+
+  @media (max-width: 1000px) {
+    .product-hero-grid,
+    .problem-grid,
+    .feature-blocks,
+    .faq-row,
+    .other-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .faq-row {
+      gap: 10px;
+    }
+  }
+}
+
+@layer components {
+  .pane-link {
+    margin-top: 28px;
   }
 }

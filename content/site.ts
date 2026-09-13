@@ -58,25 +58,29 @@ export const servedBusinesses = [
 export const proofPoints = [
   {
     n: "01",
-    title: "Official WhatsApp Business API",
-    body: "Meta's Cloud API, not a browser automation workaround. The unofficial route works until it doesn't, and then your business number is gone. Ask any vendor which one they use.",
+    title: "Ask for our WhatsApp Business Account ID",
+    body: "We'll give it to you on the first call. Check it against Meta's records — and ask whoever else you're talking to for theirs. Unofficial workarounds get business numbers banned eventually.",
   },
   {
     n: "02",
-    title: "A team in India you can phone",
-    body: "Support is a person in your timezone who knows the product. There's no ticket queue because there aren't enough of us to need one.",
+    title: "Support is a phone number",
+    body: "Not a form, not a ticket queue. You'll have the number before you've paid us anything, and the person answering it knows the product because they built it.",
   },
   {
     n: "03",
-    title: "Your data leaves when you do",
-    body: "Export leads, stock and conversations whenever you want, in a format you can open. We'll say that out loud because most contracts don't.",
+    title: "Take your data and go",
+    body: "Export every lead, conversation and stock record to CSV whenever you want. No notice period, no export fee, no call with a retention team.",
   },
   {
     n: "04",
-    title: "Running this afternoon",
-    body: "Connect your number, add your team, begin. No implementation project, no consultant, no three-month rollout that quietly becomes six.",
+    title: "Live by this afternoon, or we got it wrong",
+    body: "Connect your number, add your team, start. No implementation project and no consultant. If setup takes longer than an afternoon, that's on us.",
   },
 ] as const;
+
+export const proofHeading = "We're new. So don't take our word for it.";
+export const proofIntro =
+  "No logos and no testimonials. Four things you can check for yourself instead.";
 
 export const noTestimonialsNote =
   "We don't have customers yet. Inventing quotes from businesses that don't exist would be a strange way to ask you to trust us with yours. When they're real they'll be here, with names and numbers you can ring.";

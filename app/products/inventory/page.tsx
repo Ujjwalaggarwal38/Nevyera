@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { PageShell } from "@/components/layout/PageShell";
+import { ProductPage } from "@/components/product/ProductPage";
+import { inventory } from "@/content/products";
 
-export const metadata: Metadata = { title: "Inventory" };
+export const metadata: Metadata = {
+  title: inventory.metaTitle,
+  description: inventory.metaDescription,
+};
 
 export default function Page() {
-  return <PageShell eyebrow="Solution 02" title="Vendors bid. You stop ringing round for prices." />;
+  return <ProductPage product={inventory} />;
 }

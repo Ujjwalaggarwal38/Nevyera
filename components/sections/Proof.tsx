@@ -1,6 +1,11 @@
 import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
-import { noTestimonialsNote, proofPoints } from "@/content/site";
+import {
+  noTestimonialsNote,
+  proofHeading,
+  proofIntro,
+  proofPoints,
+} from "@/content/site";
 
 export function Proof() {
   return (
@@ -9,18 +14,16 @@ export function Proof() {
         <div className="head-split">
           <Reveal>
             <GoldRule className="mb-5" />
-            <h2>Four things you can check.</h2>
+            <h2>{proofHeading}</h2>
           </Reveal>
           <Reveal>
-            <p className="t-body head-note">
-              Not claims. Things you could verify this afternoon without asking us.
-            </p>
+            <p className="t-body head-note">{proofIntro}</p>
           </Reveal>
         </div>
 
-        <div className="proof-list">
-          {proofPoints.map((point) => (
-            <Reveal key={point.n} className="proof-row">
+        <div className="proof-grid">
+          {proofPoints.map((point, i) => (
+            <Reveal key={point.n} className="proof-card" delay={(i % 2) * 90}>
               <span className="proof-n">{point.n}</span>
               <h3>{point.title}</h3>
               <p>{point.body}</p>
