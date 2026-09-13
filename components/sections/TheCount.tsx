@@ -1,3 +1,4 @@
+// ⚠ names, figures and the business are placeholders
 import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
 

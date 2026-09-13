@@ -1,5 +1,6 @@
 "use client";
 
+// ⚠ customer and agent names are placeholders
 import { useEffect, useRef, useState } from "react";
 
 const NAMES = [

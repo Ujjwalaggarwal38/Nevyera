@@ -1,5 +1,6 @@
 "use client";
 
+// ⚠ vendor names and ₹ figures are placeholders
 import { useEffect, useRef, useState } from "react";
 
 type LogEntry = {

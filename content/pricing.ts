@@ -1,3 +1,4 @@
+// ⚠ every ₹ figure is a placeholder
 
 export type Tier = {
   code: "TRIAL" | "BASIC" | "ADVANCE";

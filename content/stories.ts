@@ -1,3 +1,4 @@
+// ⚠ names, SKUs, vendors and figures are placeholders
 
 export type Beat = {
   clock: string;
