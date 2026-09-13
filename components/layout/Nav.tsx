@@ -4,12 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { company, nav } from "@/content/site";
 
-/**
- * Fixed nav. Transparent over the hero, solid obsidian once scrolled.
- *
- * Solid — not blurred. There is no backdrop-filter anywhere on this site;
- * mixed transparent and solid surfaces was the thing that read as accidental.
- */
 export function Nav() {
   const [stuck, setStuck] = useState(false);
 

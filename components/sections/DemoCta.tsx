@@ -3,10 +3,6 @@ import { Reveal } from "@/components/motion/Reveal";
 import { DemoForm } from "@/components/DemoForm";
 import { company } from "@/content/site";
 
-/**
- * The form is inline rather than a link to /contact — one less click on the
- * page's primary conversion.
- */
 export function DemoCta() {
   return (
     <section id="demo" className="section-ink section-cta">

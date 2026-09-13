@@ -3,10 +3,6 @@
 import { useEffect, useState } from "react";
 import { useInView } from "./useInView";
 
-/**
- * Counts to `to` once, when it scrolls into view. Eased out cubic so it
- * decelerates into the final number rather than stopping dead.
- */
 export function CountUp({
   to,
   duration = 1100,

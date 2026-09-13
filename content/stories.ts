@@ -1,17 +1,3 @@
-/**
- * One narrative per solution.
- *
- * The story section used to tell a single WhatsApp lead story on a page selling
- * three things — which made the whole homepage read as a Lead Manager page.
- * Each solution now gets its own three-beat timeline, driven by whichever tab
- * is selected in the Solutions section above.
- *
- * The shape is deliberately identical across all three: three timestamped
- * beats and one number. Elapsed time IS the argument in every case — minutes
- * instead of hours, minutes instead of days, weeks instead of quarters.
- *
- * ⚠ Names, SKUs, vendors and figures are illustrative placeholders.
- */
 
 export type Beat = {
   clock: string;

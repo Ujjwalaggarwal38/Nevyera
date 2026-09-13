@@ -6,14 +6,6 @@ import { company } from "@/content/site";
 
 const HEADLINE = ["The", "software", "your", "business", "runs", "on."] as const;
 
-/**
- * The hero deliberately breaks its own container: the demo panel overflows the
- * right edge and hangs below into the marquee. Nothing crossing a boundary was
- * one of the reasons an earlier draft read as templated.
- *
- * Stays a server component — the headline entrance is a CSS animation with
- * per-word delays, so it costs no JavaScript. Only the demo ships client code.
- */
 export function Hero() {
   return (
     <header className="hero">
@@ -27,9 +19,7 @@ export function Hero() {
               {company.name} · {company.city}
             </p>
 
-            {/* The space between words MUST live outside the span. These are
-                inline-block, which collapses their own trailing whitespace —
-                putting it inside renders "Thesoftwareyourbusinessrunson." */}
+            {/* space must sit outside the span: inline-block eats it */}
             <h1 className="hero-headline">
               {HEADLINE.map((word, i) => (
                 <Fragment key={word}>

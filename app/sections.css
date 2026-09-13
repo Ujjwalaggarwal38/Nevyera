@@ -1,11 +1,4 @@
-/*═══════════════════════════════════════════════════════════
-  SECTION COMPOSITION
-  globals.css holds the system (tokens, buttons, motion).
-  This file holds how the homepage sections are laid out.
-
-  Layout rule from the spec: no two sections share a structure,
-  and things are allowed to cross their boundaries.
-═══════════════════════════════════════════════════════════*/
+/* Homepage section layout. globals.css holds the system. */
 
 @layer components {
   .section-ink {
@@ -56,11 +49,7 @@
     color: var(--color-bone);
     position: relative;
     padding-top: clamp(130px, 15vw, 180px);
-    /* NO overflow:hidden here. The demo panel is supposed to hang 64px past
-       the hero's bottom edge into the marquee — clipping it kills the one
-       layout move that stops this page looking like a stack of boxes.
-       The glow is inset:0 so it never overflows and needs no clipping.
-       Stray horizontal overflow is caught by overflow-x on body. */
+    /* no overflow:hidden — it would clip the demo panel's 64px overhang */
   }
 
   .hero-glow {
@@ -126,7 +115,7 @@
     flex-wrap: wrap;
   }
 
-  /* the deliberate boundary violation: overflow right, hang below */
+  /* deliberately overflows right and hangs below into the marquee */
   .hero-breakout {
     margin-right: calc((100vw - min(100vw, 1240px)) / -2 - var(--spacing-gut));
     margin-bottom: -64px;
@@ -566,9 +555,7 @@
     margin-bottom: 2px;
   }
 
-  /*═══ THE COUNT ═══
-    Rows carry this section, not a decorative numeral. The headline states the
-    count in words so nothing extra is needed to make the point. */
+  /*═══ THE COUNT ═══*/
   .section-count {
     padding-block: clamp(80px, 10vw, 136px);
   }
@@ -602,7 +589,6 @@
     gap: 6px;
   }
 
-  /* the domain label is what maps each row to a solution below */
   .missed-domain {
     font-family: var(--font-mono);
     font-size: 10.5px;
@@ -627,7 +613,6 @@
     color: var(--color-obsidian);
   }
 
-  /* only an actual customer message is set in italics */
   .missed-what.is-quote {
     font-style: italic;
   }
@@ -642,8 +627,6 @@
     white-space: nowrap;
   }
 
-  /* one step further from answered at each row — the point is made by the
-     fade, so nothing louder is needed */
   .state-late .missed-what,
   .state-lost .missed-what {
     color: var(--color-slate);
@@ -862,8 +845,6 @@
     margin-bottom: 14px;
   }
 
-  /* repeated switcher, so a visitor who skipped the tabs still discovers
-     that this section changes per solution */
   .story-switch {
     display: flex;
     flex-wrap: wrap;
@@ -1100,7 +1081,6 @@
     background: var(--color-cream);
   }
 
-  /* the featured tier breaks upward out of the row */
   .tier.featured {
     background: var(--color-obsidian);
     color: var(--color-bone);
@@ -1316,7 +1296,6 @@
       padding-block: 26px;
     }
 
-    /* rows become stacked blocks, outcome on its own line */
     .missed-row {
       grid-template-columns: 1fr;
       gap: 8px;

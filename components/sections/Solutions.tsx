@@ -4,17 +4,10 @@ import { useSolution } from "@/components/sections/SolutionContext";
 import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
 import { CustomScope } from "@/components/demos/CustomScope";
+import { LeadDemo } from "@/components/demos/LeadDemo";
 import { InventoryDemo } from "@/components/demos/InventoryDemo";
 import { products } from "@/content/products";
 
-/**
- * The centrepiece, and the fix for an earlier draft that read as a Lead Manager
- * page wearing a company page's nav: all three solutions get equal billing and
- * a working demo each.
- *
- * The Lead Manager pane points up at the hero rather than mounting a second
- * copy of the same widget — running it twice on one page looked like padding.
- */
 export function Solutions() {
   const { active, setActive } = useSolution();
 
@@ -72,18 +65,8 @@ export function Solutions() {
               </div>
 
               <div>
-                {product.slug === "whatsapp-lead-manager" && (
-                  <div className="panel">
-                    <div className="panel-top">
-                      <span>Scroll up — it&rsquo;s in the hero</span>
-                      <b>↑</b>
-                    </div>
-                    <p className="t-body pane-pointer">
-                      The Lead Manager demo is the panel at the top of this page. Send a
-                      message there and watch it land.
-                    </p>
-                  </div>
-                )}
+                {/* second instance; the hero has one too, state is per-instance */}
+                {product.slug === "whatsapp-lead-manager" && <LeadDemo />}
                 {product.slug === "inventory" && <InventoryDemo />}
                 {product.slug === "custom" && <CustomScope />}
               </div>

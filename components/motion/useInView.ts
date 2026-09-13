@@ -2,13 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Fires once when the element enters the viewport, then stops observing.
- *
- * One observer contract for the whole site — every entrance animation goes
- * through this, so timing stays consistent and we never end up with elements
- * that animate on different triggers.
- */
 export function useInView<T extends HTMLElement>(
   options: { threshold?: number; rootMargin?: string } = {},
 ) {

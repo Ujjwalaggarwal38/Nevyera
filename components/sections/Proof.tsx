@@ -2,17 +2,6 @@ import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
 import { noTestimonialsNote, proofPoints } from "@/content/site";
 
-/**
- * Where a normal site puts a logo wall.
- *
- * HARD RULE: no invented testimonials, customer logos, or "trusted by N
- * businesses" counts appear here — or anywhere on this site — until they are
- * real, with names and numbers a prospect could ring. For a brand whose whole
- * argument is trustworthiness, a fabricated quote is the one lie that would
- * actually sink it.
- *
- * When real quotes arrive they replace these rows one-for-one. No redesign.
- */
 export function Proof() {
   return (
     <section id="about" className="section-proof">

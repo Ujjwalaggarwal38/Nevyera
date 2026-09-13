@@ -2,16 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * Inventory, demonstrated rather than listed.
- *
- * Bidding is the differentiator — no competing SMB inventory tool leads with
- * vendors competing for a purchase order — so it gets shown working instead of
- * appearing as a bullet point.
- *
- * ⚠ Vendor names and ₹ figures are illustrative placeholders.
- */
-
 type LogEntry = {
   id: number;
   at: string;

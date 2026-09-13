@@ -1,38 +1,17 @@
-/**
- * Pricing, configurable.
- *
- * Shape mirrors the backend `SubscriptionPlan` entity (monthlyPrice, currency,
- * maxTeamMembers, maxContacts, maxLeads, features) so the two can be reconciled
- * later without a rewrite.
- *
- * ⚠ CONSTRAINT: this is a statically exported site. Changing a figure here
- * needs a redeploy — a git push, about a minute. It is NOT live-editable.
- * Making it live-editable means reading plans from the Spring backend or adding
- * a CMS, both out of scope for v1.
- *
- * ⚠ Every ₹ figure below is a placeholder awaiting real numbers.
- */
 
 export type Tier = {
   code: "TRIAL" | "BASIC" | "ADVANCE";
   name: string;
   monthlyPrice: number;
   currency: "INR";
-  /** Shown under the price, e.g. "per month" or "14 days" */
   period: string;
   maxTeamMembers: number;
-  /** null = unlimited */
   maxLeads: number | null;
   features: readonly string[];
-  /** Exactly one tier should be featured — it breaks out of the row visually. */
   featured?: boolean;
   cta: { label: string; href: string };
 };
 
-/**
- * Master switch. `false` hides every figure site-wide and swaps the tiers to
- * "Contact us" — no component changes needed.
- */
 export const showPrices = true;
 
 export const currencySymbol = "₹";

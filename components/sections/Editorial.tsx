@@ -1,13 +1,6 @@
 import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
 
-/**
- * Two columns of plain prose with a drop cap.
- *
- * This section exists because a page where every block lands a clever one-liner
- * reads as generated. Real writing has paragraphs that just explain something.
- * Resist the urge to tighten this into bullet points.
- */
 export function Editorial() {
   return (
     <section className="section-editorial">

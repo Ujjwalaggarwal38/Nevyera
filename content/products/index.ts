@@ -1,20 +1,9 @@
-/**
- * Product content. Both products are LIVE — neither carries a "coming soon"
- * badge. Custom software is a service, not a product, and is typed the same way
- * only because it shares the page template.
- *
- * Nothing here describes a capability that hasn't been confirmed. The Inventory
- * feature list was confirmed verbally by Ujjwal; the Lead Manager list is
- * grounded in the actual implementation at ~/Downloads/whatsapp-lead.
- */
 
 export type Product = {
   slug: string;
   name: string;
   status: "LIVE" | "BESPOKE";
-  /** One line, used on the tab and in nav */
   short: string;
-  /** The promise, used as the pane headline */
   headline: string;
   body: string;
   features: readonly string[];

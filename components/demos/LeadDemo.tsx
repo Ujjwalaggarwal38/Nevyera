@@ -2,17 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/**
- * The stay-on-page mechanic: a visitor types a message as the customer and
- * watches it become a lead in Nevyera — captured, assigned, replied.
- *
- * This is the single most valuable element on the site. Nobody else in this
- * market lets you use the product before handing over a phone number, and it
- * does the selling a screenshot can't.
- *
- * Entirely self-contained. No network, no backend, no data leaves the browser.
- */
-
 const NAMES = [
   "Rohit Kumar",
   "Anjali Sharma",
@@ -66,8 +55,7 @@ export function LeadDemo() {
   const threadRef = useRef<HTMLDivElement>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  // Every timeout is tracked so unmounting can't leave one firing into a dead
-  // component — this panel sits in a tab that gets switched away from.
+  // tracked so unmounting can't leave a timer firing into a dead component
   const later = (fn: () => void, ms: number) => {
     timers.current.push(setTimeout(fn, ms));
   };
@@ -132,7 +120,6 @@ export function LeadDemo() {
       </div>
 
       <div className="demo-duo">
-        {/* the customer */}
         <div className="demo-col">
           <div className="col-head">
             <span>You · the customer</span>
@@ -177,7 +164,6 @@ export function LeadDemo() {
           </form>
         </div>
 
-        {/* what the business sees */}
         <div className="demo-col">
           <div className="col-head">
             <span>In Nevyera</span>

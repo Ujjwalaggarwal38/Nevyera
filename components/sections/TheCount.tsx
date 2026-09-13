@@ -1,20 +1,6 @@
 import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
 
-/**
- * The "before" — one failure from each of the three things Nevyera sells.
- *
- * This was a lost-WhatsApp-enquiry story, which is the Lead Manager's problem,
- * not the company's. Sitting before the Solutions section, it framed the whole
- * page around one product no matter how well the sections below were balanced.
- *
- * Now each row maps to a solution — enquiry → Lead Manager, purchase →
- * Inventory, process → custom software — so the section states all three
- * problems and Solutions answers them in the same order.
- *
- * ⚠ Names, SKUs, vendors and figures are illustrative placeholders.
- */
-
 const LOSSES = [
   {
     domain: "Enquiry",

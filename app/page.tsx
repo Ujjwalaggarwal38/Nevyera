@@ -13,14 +13,6 @@ import { PricingPreview } from "@/components/sections/PricingPreview";
 import { DemoCta } from "@/components/sections/DemoCta";
 import { servedBusinesses } from "@/content/site";
 
-/**
- * Homepage. Ported from demo/v5.html, which remains the visual reference.
- *
- * The order matters and the variety matters more: no two sections are built to
- * the same template, and the marquee breaks the vertical stack early. Six
- * identically-structured sections is what made an earlier draft read as
- * machine-generated.
- */
 export default function HomePage() {
   return (
     <>
@@ -29,8 +21,6 @@ export default function HomePage() {
       <Marquee items={servedBusinesses} />
       <TheCount />
       <Statement />
-      {/* Solutions and Story share a selection: pick Inventory above and the
-          timeline below becomes the procurement story, not the WhatsApp one. */}
       <SolutionProvider>
         <Solutions />
         <Story />

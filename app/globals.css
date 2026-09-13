@@ -1,48 +1,34 @@
 @import "tailwindcss";
 @import "./sections.css";
 
-/*═══════════════════════════════════════════════════════════
-  NEVYERA DESIGN SYSTEM
-  Reference build: demo/v5.html — where this and v5 disagree,
-  v5 wins. Spec: docs/superpowers/specs/2026-09-13-…-design.md
-
-  Three rules that were each earned by a rejected iteration:
-    1. No glassmorphism. Every surface is solid + 1px border.
-       There is no backdrop-filter anywhere in this codebase.
-    2. Gold never fills a button. Hairlines and accents only.
-    3. ONE easing curve and ONE travel distance. Adding motion
-       is fine; adding a second --ease-* or --travel is not.
-═══════════════════════════════════════════════════════════*/
+/* Design system. Rules and rationale: README + docs/superpowers/specs/.
+   No glassmorphism, gold never fills a button, one easing + one travel. */
 
 @theme {
   /*── colour ──*/
-  --color-obsidian: #14110e; /* primary canvas — warm, brown-leaning, never cold grey */
-  --color-char: #1e1a16;     /* raised surfaces: every panel */
-  --color-raise: #262119;    /* one step above char */
-  --color-ivory: #f7f3ec;    /* light canvas AND primary button fill */
-  --color-bone: #ebe3d6;     /* body text on dark */
-  --color-cream: #f2ece2;    /* alternate light section */
-  --color-gold: #c9a227;     /* antique. hairlines, rules, accents — NOT buttons */
-  /* Gold is legible on near-black and illegible on cream (2.06:1). Any gold
-     TEXT sitting on a light background must use this deeper bronze instead —
-     5.1:1 on cream. --color-gold stays for hairlines and rules, which are
-     decorative and not held to text contrast. */
-  --color-gold-deep: #7a5f10;
-  --color-brass: #dcc18a;    /* gold, softened — for text emphasis on dark */
-  --color-rust: #a8543f;     /* failure states only: unanswered, overdue */
-  --color-live: #4bae7e;     /* status only. green is a signal, never the room */
+  --color-obsidian: #14110e;
+  --color-char: #1e1a16;
+  --color-raise: #262119;
+  --color-ivory: #f7f3ec;
+  --color-bone: #ebe3d6;
+  --color-cream: #f2ece2;
+  --color-gold: #c9a227;
+  --color-gold-deep: #7a5f10; /* gold text on light bgs; plain gold fails AA there */
+  --color-brass: #dcc18a;
+  --color-rust: #a8543f;
+  --color-live: #4bae7e;
   --color-taupe: #9a9186;
   --color-slate: #6e665c;
   --color-faint: #4a443c;
-  --color-hair-d: #2e2820;   /* hairline on dark */
-  --color-hair-l: #e2d9ca;   /* hairline on light */
+  --color-hair-d: #2e2820;
+  --color-hair-l: #e2d9ca;
 
   /*── type ──*/
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-inter), system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
 
-  /*── motion: the whole language ──*/
+  /*── motion ──*/
   --ease-brand: cubic-bezier(0.22, 0.61, 0.36, 1);
   --travel: 26px;
   --dur-slow: 900ms;
@@ -68,8 +54,6 @@
     overflow-x: hidden;
   }
 
-  /* Fraunces is used at weight 300 and never bold. The quirk axes stay off —
-     WONK on makes it charming, which is not what this brand is. */
   h1,
   h2,
   h3 {
@@ -112,7 +96,6 @@
     outline-offset: 4px;
   }
 
-  /* Nothing on this site animates for someone who asked it not to. */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -128,15 +111,8 @@
 }
 
 @layer components {
-  /*═══ CONTEXT-AWARE GREYS ═══
-    The muted greys were chosen against a light page. On the near-black
-    sections the same values land at 1.8–3.3:1 — every small label, timestamp
-    and badge failed WCAG AA, which reads to a visitor as washed-out or
-    "glassy" even though nothing is translucent.
-
-    Overriding the tokens inside dark contexts fixes all 60+ of them at once
-    and keeps the three-step hierarchy intact:
-      taupe 7.9:1  →  slate 6.1:1  →  faint 4.7:1   (all pass AA) */
+  /* The greys are picked for a light page and fail AA on near-black.
+     Add any new dark surface to this list. */
   .hero,
   .section-ink,
   .site-footer,
@@ -145,8 +121,6 @@
   .tier.featured {
     --color-taupe: #b0a79a;
     --color-slate: #9b9285;
-    /* tuned against --color-char (#1E1A16), the lightest dark surface, not
-       against obsidian — panels are where this grey is used most */
     --color-faint: #8d8478;
   }
 
@@ -157,7 +131,7 @@
     padding-inline: var(--spacing-gut);
   }
 
-  /*── small caps label, used as section eyebrows ──*/
+  /*── section eyebrow ──*/
   .t-mono {
     font-family: var(--font-mono);
     font-size: 10.5px;
@@ -172,8 +146,7 @@
     color: var(--color-slate);
   }
 
-  /*── buttons: ivory on dark, obsidian on light, gold wipe on hover.
-       The wipe is why these read as eye-catching without a loud fill. ──*/
+  /*── buttons ──*/
   .btn {
     position: relative;
     display: inline-flex;
@@ -229,7 +202,6 @@
     border-color: var(--color-gold);
   }
 
-  /* on light sections the polarity flips */
   .on-light .btn-primary {
     background: var(--color-obsidian);
     color: var(--color-ivory);
@@ -240,7 +212,7 @@
     color: var(--color-obsidian);
   }
 
-  /*── THE solid surface. No blur, no transparency, ever. ──*/
+  /*── panel: always solid, never blurred ──*/
   .panel {
     background: var(--color-char);
     border: 1px solid var(--color-hair-d);
@@ -248,9 +220,7 @@
     padding: 22px;
   }
 
-  /*═══ MOTION ═══
-    Every entrance on this site is this one transition. If something needs
-    to animate differently, it is almost always the design that is wrong. */
+  /*── the only entrance animation ──*/
   .rv {
     opacity: 0;
     transform: translateY(var(--travel));
@@ -264,7 +234,7 @@
     transform: none;
   }
 
-  /*── the signature: a gold hairline that draws itself at every section head ──*/
+  /*── section-head hairline ──*/
   .gold-rule {
     height: 1px;
     width: 0;
@@ -276,7 +246,6 @@
     width: 84px;
   }
 
-  /*── the horizontal band that breaks the vertical stack ──*/
   .marquee {
     border-block: 1px solid var(--color-hair-d);
     background: var(--color-obsidian);

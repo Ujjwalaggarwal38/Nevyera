@@ -3,13 +3,6 @@ import { GoldRule } from "@/components/motion/GoldRule";
 import { Reveal } from "@/components/motion/Reveal";
 import { formatPrice, pricingIntro, showPrices, tiers } from "@/content/pricing";
 
-/**
- * The featured tier breaks upward out of the row — one more place where the
- * grid is deliberately violated.
- *
- * Every figure comes from content/pricing.ts. Flip `showPrices` there to hide
- * all of them site-wide without touching this file.
- */
 export function PricingPreview() {
   return (
     <section id="pricing" className="section-pricing on-light">

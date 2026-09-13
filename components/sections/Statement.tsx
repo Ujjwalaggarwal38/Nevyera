@@ -1,9 +1,5 @@
 import { Reveal } from "@/components/motion/Reveal";
 
-/**
- * A full-bleed typographic statement with no eyebrow and no grid — the one
- * section that stops the page and says something in the brand's own voice.
- */
 export function Statement() {
   return (
     <section className="section-statement">

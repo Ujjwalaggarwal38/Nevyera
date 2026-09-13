@@ -2,15 +2,6 @@
 
 import { useState } from "react";
 
-/**
- * Custom software is the hardest of the three to demonstrate — there's no
- * product to show. So instead of a screenshot, the visitor picks their own
- * business and sees roughly what we'd scope for them.
- *
- * It turns "we build custom software" (which every agency says) into something
- * specific about their trade in one click.
- */
-
 const SCOPES = {
   clinic: {
     label: "Clinic",

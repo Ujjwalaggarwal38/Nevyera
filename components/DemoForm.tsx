@@ -3,18 +3,6 @@
 import { useState } from "react";
 import { contactDestination } from "@/content/site";
 
-/**
- * The demo request form.
- *
- * ⚠ NOT WIRED UP. `contactDestination` in content/site.ts is still null — the
- * decision between "send to an email address" and "POST into the Lead Manager,
- * so Nevyera is its own first customer" hasn't been made yet (spec §11).
- *
- * Until it is, the form validates and gives honest feedback rather than
- * pretending to submit. A form that silently swallows a real enquiry is worse
- * than one that admits it isn't connected.
- */
-
 const NEEDS = [
   "Lead management",
   "Inventory",

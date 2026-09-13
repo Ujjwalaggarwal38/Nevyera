@@ -8,18 +8,6 @@ import { useSolution } from "@/components/sections/SolutionContext";
 import { products } from "@/content/products";
 import { stories } from "@/content/stories";
 
-/**
- * A three-beat timeline for whichever solution is selected above.
- *
- * All three stories share a shape — three timestamps and one number — because
- * elapsed time is the argument every time: minutes instead of hours for leads,
- * minutes instead of days for procurement, weeks instead of quarters for a
- * custom build.
- *
- * The switcher is repeated here rather than relying only on the tabs above:
- * a visitor who scrolls straight past the Solutions section would otherwise
- * never learn this section changes.
- */
 export function Story() {
   const { active, setActive } = useSolution();
   const story = stories[active] ?? stories[products[0].slug];

@@ -3,12 +3,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Nav } from "@/components/layout/Nav";
 import { GoldRule } from "@/components/motion/GoldRule";
 
-/**
- * Shell for the pages that aren't built yet.
- *
- * These are honest stubs, not fake finished pages: the nav and footer link to
- * them, so a 404 would be worse, but nobody should mistake one for done.
- */
 export function PageShell({
   eyebrow,
   title,

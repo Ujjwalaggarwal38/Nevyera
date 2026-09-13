@@ -3,14 +3,6 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { products } from "@/content/products";
 
-/**
- * Which solution the visitor is currently looking at.
- *
- * Shared between the Solutions tabs and the Story section so the narrative
- * below always matches the product above. Without this they drift: the tabs
- * offer three solutions while the story only ever tells the lead-management
- * one, which is what made the whole page read as a Lead Manager page.
- */
 type SolutionContextValue = {
   active: string;
   setActive: (slug: string) => void;
