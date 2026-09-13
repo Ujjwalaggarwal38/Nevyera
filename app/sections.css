@@ -55,8 +55,12 @@
     background: var(--color-obsidian);
     color: var(--color-bone);
     position: relative;
-    overflow: hidden;
     padding-top: clamp(130px, 15vw, 180px);
+    /* NO overflow:hidden here. The demo panel is supposed to hang 64px past
+       the hero's bottom edge into the marquee — clipping it kills the one
+       layout move that stops this page looking like a stack of boxes.
+       The glow is inset:0 so it never overflows and needs no clipping.
+       Stray horizontal overflow is caught by overflow-x on body. */
   }
 
   .hero-glow {

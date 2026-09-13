@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import { GoldRule } from "@/components/motion/GoldRule";
 import { LeadDemo } from "@/components/demos/LeadDemo";
@@ -26,15 +27,20 @@ export function Hero() {
               {company.name} · {company.city}
             </p>
 
+            {/* The space between words MUST live outside the span. These are
+                inline-block, which collapses their own trailing whitespace —
+                putting it inside renders "Thesoftwareyourbusinessrunson." */}
             <h1 className="hero-headline">
               {HEADLINE.map((word, i) => (
-                <span
-                  key={word}
-                  className="hero-word"
-                  style={{ animationDelay: `${150 + i * 75}ms` }}
-                >
-                  {i === HEADLINE.length - 1 ? <em>{word}</em> : word}{" "}
-                </span>
+                <Fragment key={word}>
+                  <span
+                    className="hero-word"
+                    style={{ animationDelay: `${150 + i * 75}ms` }}
+                  >
+                    {i === HEADLINE.length - 1 ? <em>{word}</em> : word}
+                  </span>
+                  {i < HEADLINE.length - 1 ? " " : null}
+                </Fragment>
               ))}
             </h1>
 
