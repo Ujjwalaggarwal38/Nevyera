@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { PageShell } from "@/components/layout/PageShell";
+import { LegalPage } from "@/components/legal/LegalPage";
+import { terms } from "@/content/legal";
 
-export const metadata: Metadata = { title: "Terms" };
+export const metadata: Metadata = {
+  title: terms.title,
+  description: "The agreement between Nevyera and the business using its software.",
+};
 
 export default function Page() {
-  return <PageShell eyebrow="Legal" title="Terms of service" />;
+  return <LegalPage doc={terms} />;
 }

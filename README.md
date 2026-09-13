@@ -11,14 +11,28 @@ Static site. No backend, no auth, no database. Every page is prerendered HTML.
 
 | Area | State |
 | --- | --- |
-| Design direction | **Settled.** `demo/v5.html` is the reference build |
-| Homepage | **Built** — fully ported from v5 |
-| Design system | **Built** — tokens, motion primitives, content architecture |
-| Product / pricing / about / legal pages | **Stubs.** Routed and linked, not written |
+| Design direction | **Settled.** `demo/v5.html` is the visual reference |
+| Homepage | **Built** |
+| Three solution pages | **Built** — Lead Manager, Inventory, Custom |
+| Pricing page | **Built** — tiers, comparison table, FAQ |
+| About page | **Built** — facts, story, principles, "things we won't do" |
+| Contact page | **Built** — form, what-happens-next, objection FAQ |
+| Privacy & Terms | **Draft.** Structured and styled, not lawyer-reviewed |
 | Demo form | **Not connected.** Deliberately — see below |
 | Real content | **Placeholders throughout.** See "Before launch" |
 
----
+### Routes
+
+```
+/                                  Home
+/products/whatsapp-lead-manager    Solution 01
+/products/inventory                Solution 02
+/custom                            Solution 03
+/pricing                           Tiers + full comparison
+/about                             Who Nevyera is
+/contact                           Book a demo
+/privacy  /terms                   Legal (draft)
+```
 
 ## Quick start
 
@@ -68,21 +82,27 @@ Requires Node 20+. Built and verified on Node 24.
 app/
   layout.tsx          fonts + metadata
   globals.css         THE DESIGN SYSTEM — tokens, buttons, motion primitives
-  sections.css        how homepage sections are composed
+  sections.css        section layout for every page
   page.tsx            homepage (composition only)
-  */page.tsx          eight stub routes
+  */page.tsx          one file per route
 
 components/
-  layout/             Nav, Footer, PageShell
+  layout/             Nav (with mobile drawer), Footer
   motion/             Reveal, GoldRule, CountUp, Marquee, useInView
   demos/              LeadDemo, InventoryDemo, CustomScope
-  sections/           one file per homepage section
+  sections/           homepage sections + StoryTimeline
+  product/            ProductPage — the shared template for all three
+  legal/              LegalPage — shared by privacy and terms
   DemoForm.tsx
 
 content/              ALL copy, pricing and product data
   site.ts             nav, footer, proof points, company details
-  pricing.ts          tiers, ₹ figures, showPrices flag
-  products/index.ts   the three solutions
+  products/index.ts   the three solutions, incl. product-page content
+  pricing.ts          tiers, comparison table, FAQ, showPrices flag
+  stories.ts          the three timelines
+  about.ts            facts, principles, things we won't do
+  contact.ts          what-happens-next, objection FAQ
+  legal.ts            privacy + terms (draft)
 
 demo/                 v1–v5 design iterations. v5 is the reference
 docs/superpowers/specs/  the design spec and why each decision was made
@@ -162,8 +182,12 @@ quote is the one lie that would actually sink it.
 Nothing a visitor reads should live in a component.
 
 - **Copy, nav, footer, proof points** → `content/site.ts`
-- **Prices and plan limits** → `content/pricing.ts`
-- **Product names and features** → `content/products/index.ts`
+- **Prices, comparison table, pricing FAQ** → `content/pricing.ts`
+- **Product names, features, product-page copy** → `content/products/index.ts`
+- **The three timelines** → `content/stories.ts`
+- **About page facts and principles** → `content/about.ts`
+- **Contact page reassurance copy** → `content/contact.ts`
+- **Privacy and terms** → `content/legal.ts`
 
 `content/pricing.ts` mirrors the backend `SubscriptionPlan` entity
 (`monthlyPrice`, `maxTeamMembers`, `maxLeads`, `features`) so the two can be
@@ -198,26 +222,26 @@ All three are self-contained. No network calls, nothing leaves the browser.
 ## Before launch
 
 **Every specific on this site is invented.** The proof section promises we don't
-fabricate, so the page itself cannot. Replace all of it:
+fabricate, so the page itself cannot. Search the codebase for `⚠` to find them all.
 
-- [ ] Company city (`content/site.ts` → `company.city` — currently "Gurugram")
-- [ ] The example business ("Sharma Motors"), customer names, and the SKU
-- [ ] Vendor names and ₹ bid figures in `InventoryDemo`
+- [ ] Company city (`content/site.ts`, `content/about.ts` — currently "Gurugram")
+- [ ] Founding year in `content/about.ts`
+- [ ] WhatsApp number and email in `content/contact.ts` — currently `+91 00000 00000`
+- [ ] The example business ("Sharma Motors"), customer names, SKU and vendor names
 - [ ] Real pricing in `content/pricing.ts`
 - [ ] **Photography** — the biggest remaining gap. Four real images: your
       workspace or team, a customer's counter or reception, a warehouse with
       stock on shelves, and genuine product screenshots. No stock photos.
 - [ ] Confirm the Inventory feature wording, especially that Zoho is described
       as an *integration* and not as native billing
-- [ ] `/privacy` and `/terms` — these are a **product dependency**, not a
-      compliance chore: Meta requires public Privacy Policy and Terms URLs to
-      approve WhatsApp Business API access
+- [ ] **Have `/privacy` and `/terms` reviewed by a lawyer**, then delete
+      `legalDraftNotice` from `content/legal.ts` so the banner disappears. Meta
+      requires working Privacy and Terms URLs to approve WhatsApp Business API
+      access, so this is a product dependency, not a compliance chore
 - [ ] Wire up `DemoForm`. `contactDestination` in `content/site.ts` is `null`,
       so the form tells the visitor it isn't connected instead of silently
       swallowing a real enquiry. Decide between an email address and a POST into
-      the Lead Manager (Nevyera as its own first customer), then implement it.
-
----
+      the Lead Manager (Nevyera as its own first customer), then implement it
 
 ## Git
 
